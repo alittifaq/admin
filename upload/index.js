@@ -25,6 +25,6 @@ function uploadImage() {
 
 function renderToHtml(result) {
   console.log(result);
-  setInner("isi", "https://cdn.blkkalittifaq.id/"+result.data.response);
+  setInner("isi", "https://cdn.blkkalittifaq.id/"+result.response);
   show("inputfile");
 }

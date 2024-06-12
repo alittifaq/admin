@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>Admin Dashboard</h1>
+            <button onclick="logout()" class="logout-button">Logout</button>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="#" id="products-tab">Products</a></li>
+                <li><a href="#" id="gallery-tab">Gallery</a></li>
+            </ul>
+        </nav>
+        <main id="content">
+            <!-- Content will be loaded here dynamically -->
+        </main>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>

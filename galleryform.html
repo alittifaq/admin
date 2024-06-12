@@ -8,13 +8,23 @@
   <body>
     <form id="galleryForm">
       <label for="foto">Foto:</label><br />
-      <input type="text" id="foto" name="foto" /><br />
+      <input
+        type="text"
+        id="foto"
+        name="foto"
+        value="https://cdn.blkkalittifaq.id/img/about2.jpg"
+      /><br />
 
-      <label for="judul_kegiatan">judul_kegiatan:</label><br />
-      <input type="text" id="judul_kegiatan" name="judul_kegiatan" /><br />
+      <label for="judul_kegiatan">Judul Kegiatan:</label><br />
+      <input
+        type="text"
+        id="judul_kegiatan"
+        name="judul_kegiatan"
+        value="kegiatan 4"
+      /><br />
 
-      <label for="tahun">tahun:</label><br />
-      <input type="int" id="tahun" name="tahun" /><br />
+      <label for="tahun">Tahun:</label><br />
+      <input type="number" id="tahun" name="tahun" value="2024" /><br />
 
       <input type="submit" value="Submit" />
     </form>
@@ -25,13 +35,20 @@
         .addEventListener("submit", function (event) {
           event.preventDefault(); // Prevent the form from submitting normally
 
-          var formData = new FormData(this); // Create FormData object to send form data
+          var formData = {
+            foto: document.getElementById("foto").value,
+            judul_kegiatan: document.getElementById("judul_kegiatan").value,
+            tahun: parseInt(document.getElementById("tahun").value), // Parse tahun as integer
+          }; // Create JavaScript object to represent form data
 
           fetch(
             "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
             {
               method: "POST",
-              body: formData,
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData), // Convert JavaScript object to JSON string
             }
           )
             .then((response) => {

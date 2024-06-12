@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Input Form Gallery</title>
+  </head>
+  <body>
+    <form id="galleryForm">
+      <label for="foto">Foto:</label><br />
+      <input type="text" id="foto" name="foto" /><br />
+
+      <label for="judul_kegiatan">judul_kegiatan:</label><br />
+      <input type="text" id="judul_kegiatan" name="judul_kegiatan" /><br />
+
+      <label for="tahun">tahun:</label><br />
+      <input type="int" id="tahun" name="tahun" /><br />
+
+      <input type="submit" value="Submit" />
+    </form>
+
+    <script>
+      document
+        .getElementById("galleryForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the form from submitting normally
+
+          var formData = new FormData(this); // Create FormData object to send form data
+
+          fetch(
+            "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
+            {
+              method: "POST",
+              body: formData,
+            }
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Success:", data);
+              // Handle success response here, if needed
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error here, if needed
+            });
+        });
+    </script>
+  </body>
+</html>

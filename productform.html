@@ -8,14 +8,18 @@
   <body>
     <form id="productForm">
       <label for="foto">Foto:</label><br />
-      <input type="text" id="foto" name="foto" /><br />
+      <input
+        type="text"
+        id="foto"
+        name="foto"
+        value="https://cdn.blkkalittifaq.id/img/rollbread.jpg"
+      /><br />
 
       <label for="nama">Nama:</label><br />
-      <input type="text" id="nama" name="nama" /><br />
+      <input type="text" id="nama" name="nama" value="Rollbread" /><br />
 
       <input type="submit" value="Submit" />
     </form>
-   
 
     <script>
       document
@@ -23,13 +27,19 @@
         .addEventListener("submit", function (event) {
           event.preventDefault(); // Prevent the form from submitting normally
 
-          var formData = new FormData(this); // Create FormData object to send form data
+          var formData = {
+            foto: document.getElementById("foto").value,
+            nama: document.getElementById("nama").value,
+          }; // Create JavaScript object to represent form data
 
           fetch(
             "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
             {
               method: "POST",
-              body: formData,
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData), // Convert JavaScript object to JSON string
             }
           )
             .then((response) => {

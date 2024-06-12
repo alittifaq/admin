@@ -2,6 +2,7 @@ import {
   setInner,
   show,
   hide,
+  getValue,
   setValue,
   getFileSize,
 } from "https://cdn.jsdelivr.net/gh/jscroot/element@0.0.6/croot.js";

@@ -9,7 +9,8 @@ import { postFile } from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.2/croot.js
 
 window.uploadImage = uploadImage;
 
-const target_url = "https://satudata.fly.dev/upload";
+const target_url =
+  "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/upload/img";
 
 function uploadImage() {
   if (!getValue("imageInput")) {

@@ -4,29 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Input Form Product</title>
+    <link rel="stylesheet" href="productform.css" />
   </head>
   <body>
-    <div id="inputfile">
-      <input type="file" id="imageInput" accept="image/*" capture />
-      <button onclick="uploadImage()">Upload Image</button>
+    <div id="container">
+      <div id="formWrapper">
+        <div id="inputfile">
+          <h2>Upload Image</h2>
+          <div id="fileInputWrapper">
+            <input type="file" id="imageInput" accept="image/*" capture />
+            <button onclick="uploadImage()">Upload Image</button>
+          </div>
+        </div>
+        <form id="productForm">
+          <label for="foto">Foto:</label><br />
+          <input type="text" id="foto" name="foto" value="" /><br />
+
+          <label for="nama">Nama:</label><br />
+          <input type="text" id="nama" name="nama" value="" /><br />
+
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
     </div>
-    <br />
-    <pre id="isi"></pre>
     <script type="module" src="./index.js"></script>
-    <form id="productForm">
-      <label for="foto">Foto:</label><br />
-      <input
-        type="text"
-        id="foto"
-        name="foto"
-        value=""
-      /><br />
-
-      <label for="nama">Nama:</label><br />
-      <input type="text" id="nama" name="nama" value="" /><br />
-
-      <input type="submit" value="Submit" />
-    </form>
 
     <script>
       document

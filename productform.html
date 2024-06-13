@@ -32,111 +32,117 @@
     <script type="module" src="./index.js"></script>
 
     <script>
-      document
-        .getElementById("productForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault(); // Prevent the form from submitting normally
+      document.getElementById("productForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
 
-          var formData = {
-            foto: document.getElementById("foto").value,
-            nama: document.getElementById("nama").value,
-          }; // Create JavaScript object to represent form data
+        var formData = {
+          foto: document.getElementById("foto").value,
+          nama: document.getElementById("nama").value,
+        }; // Create JavaScript object to represent form data
 
+        fetch(
+          "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData), // Convert JavaScript object to JSON string
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.text(); // Use text() to get raw response
+          })
+          .then((text) => {
+            try {
+              const data = JSON.parse(text); // Try to parse JSON
+              console.log("Success:", data);
+            } catch (error) {
+              console.error("Error parsing JSON:", error);
+              console.log("Raw response:", text); // Log raw response for debugging
+            }
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+          });
+      });
+
+      document.getElementById("editButton").addEventListener("click", function () {
+        var editData = {
+          foto: document.getElementById("foto").value,
+          nama: document.getElementById("nama").value,
+        }; // Create JavaScript object to represent form data
+
+        var editId = prompt("Enter the Product ID to edit:");
+
+        if (editId) {
           fetch(
-            "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
+            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${editId}`,
             {
-              method: "POST",
+              method: "PUT",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(formData), // Convert JavaScript object to JSON string
+              body: JSON.stringify(editData), // Convert JavaScript object to JSON string
             }
           )
             .then((response) => {
               if (!response.ok) {
                 throw new Error("Network response was not ok");
               }
-              return response.json();
+              return response.text(); // Use text() to get raw response
             })
-            .then((data) => {
-              console.log("Success:", data);
-              // Handle success response here, if needed
+            .then((text) => {
+              try {
+                const data = JSON.parse(text); // Try to parse JSON
+                console.log("Edit Success:", data);
+              } catch (error) {
+                console.error("Error parsing JSON:", error);
+                console.log("Raw response:", text); // Log raw response for debugging
+              }
             })
             .catch((error) => {
-              console.error("Error:", error);
-              // Handle error here, if needed
+              console.error("Fetch error:", error);
             });
-        });
+        }
+      });
 
-      document
-        .getElementById("editButton")
-        .addEventListener("click", function () {
-          var editData = {
-            foto: document.getElementById("foto").value,
-            nama: document.getElementById("nama").value,
-          }; // Create JavaScript object to represent form data
+      document.getElementById("deleteButton").addEventListener("click", function () {
+        var deleteId = prompt("Enter the Product ID to delete:");
 
-          var editId = prompt("Enter the Product ID to edit:");
-
-          if (editId) {
-            fetch(
-              `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${editId}`,
-              {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(editData), // Convert JavaScript object to JSON string
+        if (deleteId) {
+          fetch(
+            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${deleteId}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
               }
-            )
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Network response was not ok");
-                }
-                return response.json();
-              })
-              .then((data) => {
-                console.log("Edit Success:", data);
-                // Handle success response here, if needed
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-                // Handle error here, if needed
-              });
-          }
-        });
-
-      document
-        .getElementById("deleteButton")
-        .addEventListener("click", function () {
-          var deleteId = prompt("Enter the Product ID to delete:");
-
-          if (deleteId) {
-            fetch(
-              `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${deleteId}`,
-              {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json",
-                },
+            }
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
               }
-            )
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Network response was not ok");
-                }
-                return response.json();
-              })
-              .then((data) => {
+              return response.text(); // Use text() to get raw response
+            })
+            .then((text) => {
+              try {
+                const data = JSON.parse(text); // Try to parse JSON
                 console.log("Delete Success:", data);
-                // Handle success response here, if needed
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-                // Handle error here, if needed
-              });
-          }
-        });
+              } catch (error) {
+                console.error("Error parsing JSON:", error);
+                console.log("Raw response:", text); // Log raw response for debugging
+              }
+            })
+            .catch((error) => {
+              console.error("Fetch error:", error);
+            });
+        }
+      });
     </script>
   </body>
 </html>

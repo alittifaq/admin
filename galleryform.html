@@ -38,6 +38,31 @@
 
           <input type="submit" value="Submit" />
         </form>
+
+        <h2>Edit Gallery Item</h2>
+        <form id="editGalleryForm">
+          <label for="editId">Gallery ID:</label><br />
+          <input type="text" id="editId" name="editId" value="" /><br />
+
+          <label for="editFoto">Foto:</label><br />
+          <input type="text" id="editFoto" name="editFoto" value="" /><br />
+
+          <label for="editJudulKegiatan">Judul Kegiatan:</label><br />
+          <input type="text" id="editJudulKegiatan" name="editJudulKegiatan" value="" /><br />
+
+          <label for="editTahun">Tahun:</label><br />
+          <input type="number" id="editTahun" name="editTahun" value="" /><br />
+
+          <input type="submit" value="Edit" />
+        </form>
+
+        <h2>Delete Gallery Item</h2>
+        <form id="deleteGalleryForm">
+          <label for="deleteId">Gallery ID:</label><br />
+          <input type="text" id="deleteId" name="deleteId" value="" /><br />
+
+          <input type="submit" value="Delete" />
+        </form>
       </div>
     </div>
     <script type="module" src="./index.js"></script>
@@ -79,6 +104,73 @@
               // Handle error here, if needed
             });
         });
+
+      document.getElementById("editGalleryForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        var editData = {
+          foto: document.getElementById("editFoto").value,
+          judul_kegiatan: document.getElementById("editJudulKegiatan").value,
+          tahun: parseInt(document.getElementById("editTahun").value), // Parse tahun as integer
+        }; // Create JavaScript object to represent form data
+
+        var editId = document.getElementById("editId").value;
+
+        fetch(
+          `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${editId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editData), // Convert JavaScript object to JSON string
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Success:", data);
+            // Handle success response here, if needed
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            // Handle error here, if needed
+          });
+      });
+
+      document.getElementById("deleteGalleryForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        var deleteId = document.getElementById("deleteId").value;
+
+        fetch(
+          `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${deleteId}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Success:", data);
+            // Handle success response here, if needed
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            // Handle error here, if needed
+          });
+      });
     </script>
   </body>
 </html>

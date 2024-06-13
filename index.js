@@ -20,7 +20,7 @@ function uploadImage() {
   }
   hide("inputfile");
   let besar = getFileSize("imageInput");
-  setInner("isi", besar);
+  console.log(besar);
   postFile(target_url, "imageInput", "image", renderToHtml);
 }
 

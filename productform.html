@@ -70,61 +70,39 @@
           });
       });
 
-      function fetchProductByName(name) {
-        return fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product?name=${name}`)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then(data => {
-            if (data.length === 0) {
-              throw new Error("Product not found");
-            }
-            return data[0]; // Assuming unique names, return the first match
-          });
-      }
-
       document.getElementById("editButton").addEventListener("click", function () {
         var editName = prompt("Enter the Product Name to edit:");
 
         if (editName) {
-          fetchProductByName(editName)
-            .then(product => {
-              var editData = {
-                foto: document.getElementById("foto").value,
-                nama: document.getElementById("nama").value,
-              };
+          var editData = {
+            foto: document.getElementById("foto").value,
+            nama: document.getElementById("nama").value,
+          };
 
-              fetch(
-                `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${product.id}`,
-                {
-                  method: "PUT",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(editData), // Convert JavaScript object to JSON string
-                }
-              )
-                .then((response) => {
-                  if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                  }
-                  return response.text(); // Use text() to get raw response
-                })
-                .then((text) => {
-                  try {
-                    const data = JSON.parse(text); // Try to parse JSON
-                    console.log("Edit Success:", data);
-                  } catch (error) {
-                    console.error("Error parsing JSON:", error);
-                    console.log("Raw response:", text); // Log raw response for debugging
-                  }
-                })
-                .catch((error) => {
-                  console.error("Fetch error:", error);
-                });
+          fetch(
+            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product?name=${editName}`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(editData), // Convert JavaScript object to JSON string
+            }
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.text(); // Use text() to get raw response
+            })
+            .then((text) => {
+              try {
+                const data = JSON.parse(text); // Try to parse JSON
+                console.log("Edit Success:", data);
+              } catch (error) {
+                console.error("Error parsing JSON:", error);
+                console.log("Raw response:", text); // Log raw response for debugging
+              }
             })
             .catch((error) => {
               console.error("Fetch error:", error);
@@ -136,38 +114,35 @@
         var deleteName = prompt("Enter the Product Name to delete:");
 
         if (deleteName) {
-          fetchProductByName(deleteName)
-            .then(product => {
-              fetch(
-                `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${product.id}`,
-                {
-                  method: "DELETE",
-                  headers: {
-                    "Content-Type": "application/json",
-                  }
-                }
-              )
-                .then((response) => {
-                  if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                  }
-                  return response.text(); // Use text() to get raw response
-                })
-                .then((text) => {
-                  try {
-                    const data = JSON.parse(text); // Try to parse JSON
-                    console.log("Delete Success:", data);
-                  } catch (error) {
-                    console.error("Error parsing JSON:", error);
-                    console.log("Raw response:", text); // Log raw response for debugging
-                  }
-                })
-                .catch((error) => {
-                  console.error("Fetch error:", error);
-                });
+          fetch(
+            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product?name=${deleteName}`,
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              }
+            }
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.text(); // Use text() to get raw response
+            })
+            .then((text) => {
+              try {
+                const data = JSON.parse(text); // Try to parse JSON
+                console.log("Delete Success:", data);
+              } catch (error) {
+                console.error("Error parsing JSON:", error);
+                console.log("Raw response:", text); // Log raw response for debugging
+              }
             })
             .catch((error) => {
               console.error("Fetch error:", error);
             });
         }
-     
+      });
+    </script>
+  </body>
+</html>

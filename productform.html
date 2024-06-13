@@ -25,132 +25,118 @@
 
           <input type="submit" value="Submit" />
         </form>
-
-        <h2>Edit Product</h2>
-        <form id="editProductForm">
-          <label for="editId">Product ID:</label><br />
-          <input type="text" id="editId" name="editId" value="" /><br />
-
-          <label for="editFoto">Foto:</label><br />
-          <input type="text" id="editFoto" name="editFoto" value="" /><br />
-
-          <label for="editNama">Nama:</label><br />
-          <input type="text" id="editNama" name="editNama" value="" /><br />
-
-          <input type="submit" value="Edit" />
-        </form>
-
-        <h2>Delete Product</h2>
-        <form id="deleteProductForm">
-          <label for="deleteId">Product ID:</label><br />
-          <input type="text" id="deleteId" name="deleteId" value="" /><br />
-
-          <input type="submit" value="Delete" />
-        </form>
+        <button id="editButton">Edit</button>
+        <button id="deleteButton">Delete</button>
       </div>
     </div>
     <script type="module" src="./index.js"></script>
 
     <script>
-      document.getElementById("productForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the form from submitting normally
+      document
+        .getElementById("productForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent the form from submitting normally
 
-        var formData = {
-          foto: document.getElementById("foto").value,
-          nama: document.getElementById("nama").value,
-        }; // Create JavaScript object to represent form data
+          var formData = {
+            foto: document.getElementById("foto").value,
+            nama: document.getElementById("nama").value,
+          }; // Create JavaScript object to represent form data
 
-        fetch(
-          "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData), // Convert JavaScript object to JSON string
+          fetch(
+            "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData), // Convert JavaScript object to JSON string
+            }
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Success:", data);
+              // Handle success response here, if needed
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error here, if needed
+            });
+        });
+
+      document
+        .getElementById("editButton")
+        .addEventListener("click", function () {
+          var editData = {
+            foto: document.getElementById("foto").value,
+            nama: document.getElementById("nama").value,
+          }; // Create JavaScript object to represent form data
+
+          var editId = prompt("Enter the Product ID to edit:");
+
+          if (editId) {
+            fetch(
+              `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${editId}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(editData), // Convert JavaScript object to JSON string
+              }
+            )
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                console.log("Edit Success:", data);
+                // Handle success response here, if needed
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                // Handle error here, if needed
+              });
           }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("Success:", data);
-            // Handle success response here, if needed
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            // Handle error here, if needed
-          });
-      });
+        });
 
-      document.getElementById("editProductForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the form from submitting normally
+      document
+        .getElementById("deleteButton")
+        .addEventListener("click", function () {
+          var deleteId = prompt("Enter the Product ID to delete:");
 
-        var editData = {
-          foto: document.getElementById("editFoto").value,
-          nama: document.getElementById("editNama").value,
-        }; // Create JavaScript object to represent form data
-
-        var editId = document.getElementById("editId").value;
-
-        fetch(
-          `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${editId}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(editData), // Convert JavaScript object to JSON string
+          if (deleteId) {
+            fetch(
+              `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${deleteId}`,
+              {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            )
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                console.log("Delete Success:", data);
+                // Handle success response here, if needed
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                // Handle error here, if needed
+              });
           }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("Success:", data);
-            // Handle success response here, if needed
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            // Handle error here, if needed
-          });
-      });
-
-      document.getElementById("deleteProductForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the form from submitting normally
-
-        var deleteId = document.getElementById("deleteId").value;
-
-        fetch(
-          `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${deleteId}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            }
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("Success:", data);
-            // Handle success response here, if needed
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            // Handle error here, if needed
-          });
-      });
+        });
     </script>
   </body>
 </html>

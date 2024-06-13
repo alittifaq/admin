@@ -4,37 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Input Form Gallery</title>
+    <link rel="stylesheet" href="productform.css" />
   </head>
   <body>
-    <div id="inputfile">
-      <input type="file" id="imageInput" accept="image/*" capture />
-      <button onclick="uploadImage()">Upload Image</button>
+    <div id="container">
+      <div id="formWrapper">
+        <div id="inputfile">
+          <h2>Upload Image</h2>
+          <div id="fileInputWrapper">
+            <input type="file" id="imageInput" accept="image/*" capture />
+            <button onclick="uploadImage()">Upload Image</button>
+          </div>
+        </div>
+        <form id="galleryForm">
+          <label for="foto">Foto:</label><br />
+          <input
+            type="text"
+            id="foto"
+            name="foto"
+            value="https://cdn.blkkalittifaq.id/img/about2.jpg"
+          /><br />
+
+          <label for="judul_kegiatan">Judul Kegiatan:</label><br />
+          <input
+            type="text"
+            id="judul_kegiatan"
+            name="judul_kegiatan"
+            value="kegiatan 4"
+          /><br />
+
+          <label for="tahun">Tahun:</label><br />
+          <input type="number" id="tahun" name="tahun" value="2024" /><br />
+
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
     </div>
-    <br />
-    <pre id="isi"></pre>
     <script type="module" src="./index.js"></script>
-    <form id="galleryForm">
-      <label for="foto">Foto:</label><br />
-      <input
-        type="text"
-        id="foto"
-        name="foto"
-        value="https://cdn.blkkalittifaq.id/img/about2.jpg"
-      /><br />
-
-      <label for="judul_kegiatan">Judul Kegiatan:</label><br />
-      <input
-        type="text"
-        id="judul_kegiatan"
-        name="judul_kegiatan"
-        value="kegiatan 4"
-      /><br />
-
-      <label for="tahun">Tahun:</label><br />
-      <input type="number" id="tahun" name="tahun" value="2024" /><br />
-
-      <input type="submit" value="Submit" />
-    </form>
 
     <script>
       document

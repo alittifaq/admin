@@ -82,69 +82,73 @@
             });
         });
 
-      document.getElementById("editButton").addEventListener("click", function () {
-        var formData = {
-          foto: document.getElementById("foto").value,
-          judul_kegiatan: document.getElementById("judul_kegiatan").value,
-          tahun: parseInt(document.getElementById("tahun").value),
-        };
+      document
+        .getElementById("editButton")
+        .addEventListener("click", function () {
+          var formData = {
+            foto: document.getElementById("foto").value,
+            judul_kegiatan: document.getElementById("judul_kegiatan").value,
+            tahun: parseInt(document.getElementById("tahun").value),
+          };
 
-        fetch(
-          "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
+          fetch(
+            "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
             }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("Edit Success:", data);
-            // Handle success response here, if needed
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            // Handle error here, if needed
-          });
-      });
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Edit Success:", data);
+              // Handle success response here, if needed
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error here, if needed
+            });
+        });
 
-      document.getElementById("deleteButton").addEventListener("click", function () {
-        var formData = {
-          foto: document.getElementById("foto").value,
-        };
+      document
+        .getElementById("deleteButton")
+        .addEventListener("click", function () {
+          var deleteData = {
+            judul_kegiatan: document.getElementById("judul_kegiatan").value,
+          };
 
-        fetch(
-          "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
+          fetch(
+            "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
+            {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(deleteData),
             }
-            return response.json();
-          })
-          .then((data) => {
-            console.log("Delete Success:", data);
-            // Handle success response here, if needed
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            // Handle error here, if needed
-          });
-      });
+          )
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Delete Success:", data);
+              // Handle success response here, if needed
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error here, if needed
+            });
+        });
     </script>
   </body>
 </html>

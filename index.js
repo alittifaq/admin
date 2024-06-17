@@ -19,13 +19,30 @@ function uploadImage() {
     return;
   }
   hide("inputfile");
-  let besar = getFileSize("imageInput");
-  console.log(besar);
-  postFile(target_url, "imageInput", "image", renderToHtml);
+  let fileInput = document.getElementById("imageInput").files[0];
+  let formData = new FormData();
+  formData.append("image", fileInput);
+
+  fetch(target_url, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      renderToHtml(data);
+    })
+    .catch((error) => {
+      console.error("Error uploading image:", error);
+      // Handle error here
+    });
 }
 
 function renderToHtml(result) {
-  console.log(result);
-  setValue("foto", "https://cdn.blkkalittifaq.id/"+result.response);
+  if (result && result.response) {
+    setValue("foto", "https://cdn.blkkalittifaq.id/" + result.response);
+  } else {
+    console.error("Invalid or empty response:", result);
+    // Handle the error or provide fallback behavior
+  }
   show("inputfile");
 }

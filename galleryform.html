@@ -25,7 +25,7 @@
                   type="text"
                   id="foto"
                   name="foto"
-                  value="https://cdn.blkkalittifaq.id/img/about2.jpg"
+                  value=""
                 />
               </td>
             </tr>
@@ -36,14 +36,14 @@
                   type="text"
                   id="judul_kegiatan"
                   name="judul_kegiatan"
-                  value="kegiatan 4"
+                  value=""
                 />
               </td>
             </tr>
             <tr>
               <td><label for="tahun">Tahun:</label></td>
               <td>
-                <input type="number" id="tahun" name="tahun" value="2024" />
+                <input type="number" id="tahun" name="tahun" value="" />
               </td>
             </tr>
             <tr>
@@ -87,15 +87,19 @@
               if (!response.ok) {
                 throw new Error("Network response was not ok");
               }
-              return response.json();
+              return response.text();
             })
-            .then((data) => {
-              console.log("Success:", data);
-              // Handle success response here, if needed
+            .then((text) => {
+              try {
+                const data = JSON.parse(text); // Try to parse JSON
+                console.log("Success:", data);
+              } catch (error) {
+                console.error("Error parsing JSON:", error);
+                console.log("Raw response:", text); // Log raw response for debugging
+              }
             })
             .catch((error) => {
-              console.error("Error:", error);
-              // Handle error here, if needed
+              console.error("Fetch error:", error);
             });
         });
 

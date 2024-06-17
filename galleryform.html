@@ -20,15 +20,31 @@
           <table>
             <tr>
               <td><label for="foto">Foto:</label></td>
-              <td><input type="text" id="foto" name="foto" value="https://cdn.blkkalittifaq.id/img/about2.jpg" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="foto"
+                  name="foto"
+                  value="https://cdn.blkkalittifaq.id/img/about2.jpg"
+                />
+              </td>
             </tr>
             <tr>
               <td><label for="judul_kegiatan">Judul Kegiatan:</label></td>
-              <td><input type="text" id="judul_kegiatan" name="judul_kegiatan" value="kegiatan 4" /></td>
+              <td>
+                <input
+                  type="text"
+                  id="judul_kegiatan"
+                  name="judul_kegiatan"
+                  value="kegiatan 4"
+                />
+              </td>
             </tr>
             <tr>
               <td><label for="tahun">Tahun:</label></td>
-              <td><input type="number" id="tahun" name="tahun" value="2024" /></td>
+              <td>
+                <input type="number" id="tahun" name="tahun" value="2024" />
+              </td>
             </tr>
             <tr>
               <td colspan="2" class="center">
@@ -86,36 +102,40 @@
       document
         .getElementById("editButton")
         .addEventListener("click", function () {
-          var formData = {
-            foto: document.getElementById("foto").value,
-            judul_kegiatan: document.getElementById("judul_kegiatan").value,
-            tahun: parseInt(document.getElementById("tahun").value),
-          };
+          var editName = prompt("Enter the Gallery Name to edit:");
 
-          fetch(
-            "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formData),
-            }
-          )
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("Network response was not ok");
+          if (editName) {
+            var editData = {
+              foto: document.getElementById("foto").value,
+              judul_kegiatan: document.getElementById("judul_kegiatan").value,
+              tahun: parseInt(document.getElementById("tahun").value),
+            };
+
+            fetch(
+              "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(editData),
               }
-              return response.json();
-            })
-            .then((data) => {
-              console.log("Edit Success:", data);
-              // Handle success response here, if needed
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              // Handle error here, if needed
-            });
+            )
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("Network response was not ok");
+                }
+                return response.json();
+              })
+              .then((data) => {
+                console.log("Edit Success:", data);
+                // Handle success response here, if needed
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                // Handle error here, if needed
+              });
+          }
         });
 
       document

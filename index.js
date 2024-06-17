@@ -21,23 +21,17 @@ const target_url =
     hide("inputfile");
     let besar = getFileSize("imageInput");
     console.log(besar);
-    postFile(target_url, "imageInput", "image", renderToHtml)
-      .catch(error => {
-        console.error('Error uploading file:', error);
-        // Handle error if needed
-        show("inputfile"); // Make sure inputfile is shown again in case of error
-      });
+    postFile(target_url, "imageInput", "image", renderToHtml); // Tidak ada .catch di sini
   }
   
-
-function renderToHtml(result) {
-  console.log(result);
-  if (result && result.response) {
-    setValue("foto", "https://cdn.blkkalittifaq.id/" + result.response);
-  } else {
-    console.error("Invalid or empty response:", result);
-    // Handle the error or provide fallback behavior
+  function renderToHtml(result) {
+    if (result && result.response) {
+      setValue("foto", "https://cdn.blkkalittifaq.id/" + result.response);
+    } else {
+      console.error("Invalid or empty response:", result);
+      // Handle the error or provide fallback behavior
+    }
+    show("inputfile");
   }
-  show("inputfile");
-}
+  
 

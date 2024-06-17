@@ -112,8 +112,6 @@
                 try {
                   const data = JSON.parse(text); // Try to parse JSON
                   console.log("Edit Success:", data);
-                  setValue("foto", result.foto); // Menggunakan nilai foto yang baru dari respons server
-                  show("inputfile");
                 } catch (error) {
                   console.error("Error parsing JSON:", error);
                   console.log("Raw response:", text); // Log raw response for debugging

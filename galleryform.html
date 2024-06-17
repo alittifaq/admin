@@ -21,12 +21,7 @@
             <tr>
               <td><label for="foto">Foto:</label></td>
               <td>
-                <input
-                  type="text"
-                  id="foto"
-                  name="foto"
-                  value=""
-                />
+                <input type="text" id="foto" name="foto" value="" />
               </td>
             </tr>
             <tr>
@@ -173,14 +168,8 @@
                 }
                 return response.json();
               })
-              .then((text) => {
-                try {
-                  const data = JSON.parse(text); // Try to parse JSON
-                  console.log("Delete Success:", data);
-                } catch (error) {
-                  console.error("Error parsing JSON:", error);
-                  console.log("Raw response:", text); // Log raw response for debugging
-                }
+              .then((data) => {
+                console.log("Delete Success:", data);
               })
               .catch((error) => {
                 console.error("Fetch error:", error);

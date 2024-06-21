@@ -85,7 +85,7 @@ async function loadGallery() {
                 <td>${item.tahun}</td>
                 <td>
                     <div class="action-buttons">
-                        <button onclick="editGalleryItem(${index})">Edit</button>
+                        <button onclick="editGalleryItem('${item.judul_kegiatan}')">Edit</button>
                         <button class="delete" onclick="deleteGalleryItem(${index})">Delete</button>
                     </div>
                 </td>
@@ -166,6 +166,7 @@ async function editGalleryItem(judulKegiatan) {
         alert('Terjadi kesalahan saat mengedit item galeri.');
     }
 }
+
 
 
 async function deleteGalleryItem(index) {

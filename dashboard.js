@@ -73,14 +73,15 @@ async function loadGallery() {
     `;
 
     try {
-        const response = await fetch('/api/gallery');
+        const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery');
         const gallery = await response.json();
         const galleryTableBody = document.getElementById('gallery-table-body');
+        galleryTableBody.innerHTML = ''; // Clear existing content
         gallery.forEach((item, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><img src="${item.foto}" alt="${item.judul}" width="50"></td>
-                <td>${item.judul}</td>
+                <td><img src="${item.foto}" alt="${item.judul_kegiatan}" width="50"></td>
+                <td>${item.judul_kegiatan}</td>
                 <td>${item.tahun}</td>
                 <td>
                     <div class="action-buttons">
@@ -95,6 +96,22 @@ async function loadGallery() {
         console.error('Error loading gallery:', error);
     }
 }
+
+function addGalleryItem() {
+    // Implement the function to add a gallery item
+}
+
+function editGalleryItem(index) {
+    // Implement the function to edit a gallery item
+}
+
+function deleteGalleryItem(index) {
+    // Implement the function to delete a gallery item
+}
+
+// Call the function to load gallery on page load
+loadGallery();
+
 
 function logout() {
     window.location.href = 'login.html';

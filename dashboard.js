@@ -148,7 +148,7 @@ async function editGalleryItem(index) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ /* Data yang ingin diubah */ })
+            body: JSON.stringify({ judul_kegiatan: 'Judul Kegiatan Baru', tahun: 2025, deskripsi: 'Deskripsi Kegiatan Baru', })
         });
         if (response.ok) {
             alert(`Item galeri ${index} berhasil diubah.`);

@@ -141,17 +141,22 @@ async function addGalleryItem() {
     // Example: await fetch('/api/gallery', { method: 'POST', body: JSON.stringify(galleryData) });
 }
 
-async function editGalleryItem(index) {
+async function editGalleryItem(judulKegiatan) {
     try {
-        const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/detail/${index}`, {
+        const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/detail', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ judul_kegiatan: 'Judul Kegiatan Baru', tahun: 2025, deskripsi: 'Deskripsi Kegiatan Baru', })
+            body: JSON.stringify({
+                judul_kegiatan: judulKegiatan,
+                tahun: 2025,
+                deskripsi: 'Deskripsi Kegiatan Baru',
+                // tambahkan properti lain yang ingin diubah
+            })
         });
         if (response.ok) {
-            alert(`Item galeri ${index} berhasil diubah.`);
+            alert(`Item galeri dengan judul kegiatan '${judulKegiatan}' berhasil diubah.`);
             loadGallery(); // Muat ulang galeri setelah mengedit
         } else {
             throw new Error('Gagal mengubah item galeri.');
@@ -161,6 +166,7 @@ async function editGalleryItem(index) {
         alert('Terjadi kesalahan saat mengedit item galeri.');
     }
 }
+
 
 async function deleteGalleryItem(index) {
     // Implementasi fungsi untuk menghapus item galeri

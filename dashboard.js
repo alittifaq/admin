@@ -142,9 +142,24 @@ async function addGalleryItem() {
 }
 
 async function editGalleryItem(index) {
-    // Implementasi fungsi untuk mengedit item galeri
-    alert(`Edit Gallery Item ${index}`);
-    // Example: await fetch(`/api/gallery/${index}`, { method: 'PUT', body: JSON.stringify(galleryData) });
+    try {
+        const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/detail/${index}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ /* Data yang ingin diubah */ })
+        });
+        if (response.ok) {
+            alert(`Item galeri ${index} berhasil diubah.`);
+            loadGallery(); // Muat ulang galeri setelah mengedit
+        } else {
+            throw new Error('Gagal mengubah item galeri.');
+        }
+    } catch (error) {
+        console.error('Error editing gallery item:', error);
+        alert('Terjadi kesalahan saat mengedit item galeri.');
+    }
 }
 
 async function deleteGalleryItem(index) {

@@ -149,6 +149,7 @@ async function editGalleryItem(judulKegiatan) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                Foto: fotoKegiatan,
                 judul_kegiatan: judulKegiatan,
                 tahun: 2025,
                 deskripsi: 'Deskripsi Kegiatan Baru',

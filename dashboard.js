@@ -78,7 +78,8 @@ async function loadGallery() {
         const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery');
         const gallery = await response.json();
         const galleryTableBody = document.getElementById('gallery-table-body');
-        gallery.forEach((item, index) => {
+        galleryTableBody.innerHTML = ''; // Clear the table body before adding new rows
+        gallery.forEach((item) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td><img src="${item.foto}" alt="${item.judul_kegiatan}" width="50"></td>
@@ -86,8 +87,8 @@ async function loadGallery() {
                 <td>${item.tahun}</td>
                 <td>
                     <div class="action-buttons">
-                        <button onclick="editGalleryItem(${index})">Edit</button>
-                        <button class="delete" onclick="deleteGalleryItem(${index})">Delete</button>
+                        <button onclick="editGalleryItem('${item.judul_kegiatan}')">Edit</button>
+                        <button class="delete" onclick="deleteGalleryItem('${item.judul_kegiatan}')">Delete</button>
                     </div>
                 </td>
             `;
@@ -97,6 +98,7 @@ async function loadGallery() {
         console.error('Error loading gallery:', error);
     }
 }
+
 
 function logout() {
     window.location.href = 'https://www.blkkalittifaq.id/dashboard/login.html';
@@ -186,8 +188,36 @@ async function editGalleryItem(index) {
 }
 
 
-async function deleteGalleryItem(index) {
-    // Implementasi fungsi untuk menghapus item galeri
-    alert(`Delete Gallery Item ${index}`);
-    // Example: await fetch(`/api/gallery/${index}`, { method: 'DELETE' });
+async function deleteGalleryItem(galleryTitle) {
+    try {
+        const deleteData = {
+            judul_kegiatan: galleryTitle.toString(), // Convert galleryTitle to string
+        };
+
+        const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(deleteData),
+        });
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const text = await response.text();
+        try {
+            const data = JSON.parse(text);
+            console.log("Delete Success:", data);
+            // Refresh the gallery list
+            loadGallery(); // Call loadGallery to refresh the list
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+            console.log("Raw response:", text);
+        }
+    } catch (error) {
+        console.error("Fetch error:", error);
+    }
 }
+

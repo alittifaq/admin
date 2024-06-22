@@ -113,7 +113,7 @@ async function editProduct(index) {
 async function deleteProduct(productName) {
     try {
         const deleteData = {
-            nama: productName,
+            nama: productName.toString(), // Convert productName to string
         };
 
         const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`, {
@@ -142,6 +142,7 @@ async function deleteProduct(productName) {
         console.error("Fetch error:", error);
     }
 }
+
 
 async function addGalleryItem() {
     window.location.href = 'galleryform.html';

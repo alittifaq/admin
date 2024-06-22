@@ -97,7 +97,7 @@ async function loadGallery() {
 }
 
 function logout() {
-    window.location.href = 'login.html';
+    window.location.href = 'https://www.blkkalittifaq.id/dashboard/login.html';
 }
 
 async function addProduct() {

@@ -116,7 +116,21 @@ async function editProduct(productId) {
             throw new Error('Failed to fetch product data');
         }
 
-        const productData = await response.json();
+        const text = await response.text();
+        if (!text.trim()) {
+            throw new Error('Empty response received');
+        }
+
+        let productData;
+        try {
+            productData = JSON.parse(text);
+        } catch (error) {
+            throw new Error('Error parsing JSON data');
+        }
+
+        if (!productData || Object.keys(productData).length === 0) {
+            throw new Error('Product data is empty or not in valid JSON format');
+        }
 
         // Render the edit form with existing data
         const formHtml = `

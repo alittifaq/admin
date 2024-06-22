@@ -110,13 +110,18 @@ async function editProduct(index) {
     // Example: await fetch(`/api/products/${index}`, { method: 'PUT', body: JSON.stringify(productData) });
 }
 
-async function deleteProduct() {
+async function deleteProduct(productName) {
     try {
+        const deleteData = {
+            nama: productName,
+        };
+
         const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
             },
+            body: JSON.stringify(deleteData),
         });
 
         if (!response.ok) {
@@ -137,6 +142,7 @@ async function deleteProduct() {
         console.error("Fetch error:", error);
     }
 }
+
 async function addGalleryItem() {
     window.location.href = 'galleryform.html';
 }

@@ -31,15 +31,16 @@ async function loadProducts() {
         const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product');
         const products = await response.json();
         const productTableBody = document.getElementById('product-table-body');
-        products.forEach((product, index) => {
+        productTableBody.innerHTML = ''; // Clear the table body before adding new rows
+        products.forEach((product) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td><img src="${product.foto}" alt="${product.nama}" width="50"></td>
                 <td>${product.nama}</td>
                 <td>
                     <div class="action-buttons">
-                        <button onclick="editProduct(${index})">Edit</button>
-                        <button class="delete" onclick="deleteProduct(${index})">Delete</button>
+                        <button onclick="editProduct('${product.nama}')">Edit</button>
+                        <button class="delete" onclick="deleteProduct('${product.nama}')">Delete</button>
                     </div>
                 </td>
             `;
@@ -49,6 +50,7 @@ async function loadProducts() {
         console.error('Error loading products:', error);
     }
 }
+
 
 async function loadGallery() {
     const content = document.getElementById('content');
@@ -133,7 +135,7 @@ async function deleteProduct(productName) {
             const data = JSON.parse(text);
             console.log("Delete Success:", data);
             // Refresh the product list
-            loadProducts();
+            loadProducts(); // Call loadProducts to refresh the list
         } catch (error) {
             console.error("Error parsing JSON:", error);
             console.log("Raw response:", text);
@@ -142,6 +144,7 @@ async function deleteProduct(productName) {
         console.error("Fetch error:", error);
     }
 }
+
 
 
 async function addGalleryItem() {

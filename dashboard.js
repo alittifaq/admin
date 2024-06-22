@@ -28,7 +28,7 @@ async function loadProducts() {
     `;
 
     try {
-        const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq');
+        const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product');
         const products = await response.json();
         const productTableBody = document.getElementById('product-table-body');
         products.forEach((product, index) => {

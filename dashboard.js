@@ -79,8 +79,8 @@ async function loadGallery() {
         gallery.forEach((item, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><img src="${item.foto}" alt="${item.judul}" width="50"></td>
-                <td>${item.judul}</td>
+                <td><img src="${item.foto}" alt="${item.judul_kegiatan}" width="50"></td>
+                <td>${item.judul_kegiatan}</td>
                 <td>${item.tahun}</td>
                 <td>
                     <div class="action-buttons">

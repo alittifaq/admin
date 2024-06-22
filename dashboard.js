@@ -108,42 +108,46 @@ async function addProduct() {
     window.location.href = 'productform.html';
 }
 
-async function editProductByName(productName, updatedProductData) {
-    try {
-        // Fetch product data by product name
-        const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?name=${encodeURIComponent(productName)}`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch product data');
-        }
-
-        const productData = await response.json();
-
-        // Update product data with the updated data
-        const updatedData = { ...productData, ...updatedProductData };
-
-        // Send PUT request to update the product
-        const updateResponse = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?name=${encodeURIComponent(productName)}`, {
-            method: 'PUT',
+document.getElementById("editButton").addEventListener("click", async function () {
+    var editName = prompt("Enter the Product Name to edit:");
+  
+    if (editName) {
+      var editData = {
+        foto: document.getElementById("foto").value,
+        nama: document.getElementById("nama").value,
+        name: editName,
+      };
+  
+      try {
+        const response = await fetch(
+          `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
+          {
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
-            body: JSON.stringify(updatedData),
-        });
-
-        if (!updateResponse.ok) {
-            throw new Error('Failed to update product');
+            body: JSON.stringify(editData),
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
-
-        const updatedProduct = await updateResponse.json();
-        console.log('Product updated successfully:', updatedProduct);
-        // Optionally, update the UI or perform other actions upon successful update
-    } catch (error) {
-        console.error('Error editing product:', error);
-        // Handle errors, such as displaying an error message to the user
+  
+        const text = await response.text();
+        try {
+          const data = JSON.parse(text);
+          console.log("Edit Success:", data);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          console.log("Raw response:", text);
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
     }
-}
-
-
+  });
+  
 async function deleteGalleryItem(galleryTitle) {
     try {
         const deleteData = {

@@ -117,6 +117,10 @@ async function editProduct(productId) {
         }
 
         const text = await response.text();
+        if (!text) {
+            throw new Error('Empty response received');
+        }
+
         let responseData;
         try {
             responseData = JSON.parse(text);
@@ -174,6 +178,7 @@ async function editProduct(productId) {
         console.error('Error loading product:', error);
     }
 }
+
 
 
 

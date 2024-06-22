@@ -108,7 +108,7 @@ async function addProduct() {
     window.location.href = 'productform.html';
 }
 
-document.getElementById("editButton").addEventListener("click", async function () {
+async function editProduct() {
     var editName = prompt("Enter the Product Name to edit:");
   
     if (editName) {
@@ -118,35 +118,37 @@ document.getElementById("editButton").addEventListener("click", async function (
         name: editName,
       };
   
-      try {
-        const response = await fetch(
-          `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(editData),
+      fetch(
+        `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editData),
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
           }
-        );
-  
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-  
-        const text = await response.text();
-        try {
-          const data = JSON.parse(text);
-          console.log("Edit Success:", data);
-        } catch (error) {
-          console.error("Error parsing JSON:", error);
-          console.log("Raw response:", text);
-        }
-      } catch (error) {
-        console.error("Fetch error:", error);
-      }
+          return response.text(); // Use text() to get raw response
+        })
+        .then((text) => {
+          try {
+            const data = JSON.parse(text); // Try to parse JSON
+            console.log("Edit Success:", data);
+          } catch (error) {
+            console.error("Error parsing JSON:", error);
+            console.log("Raw response:", text); // Log raw response for debugging
+          }
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
     }
-  });
+  }
+  
   
 async function deleteGalleryItem(galleryTitle) {
     try {

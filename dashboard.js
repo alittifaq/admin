@@ -110,10 +110,39 @@ async function editProduct(index) {
     // Example: await fetch(`/api/products/${index}`, { method: 'PUT', body: JSON.stringify(productData) });
 }
 
-async function deleteProduct(index) {
-    // Implementasi fungsi untuk menghapus produk
-    alert(`Delete Product ${index}`);
-    // Example: await fetch(`/api/products/${index}`, { method: 'DELETE' });
+async function deleteProduct() {
+    const deleteName = prompt("Enter the Product Name to delete:");
+
+    if (deleteName) {
+        const deleteData = {
+            nama: deleteName,
+        };
+
+        try {
+            const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(deleteData),
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const text = await response.text();
+            try {
+                const data = JSON.parse(text);
+                console.log("Delete Success:", data);
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
+                console.log("Raw response:", text);
+            }
+        } catch (error) {
+            console.error("Fetch error:", error);
+        }
+    }
 }
 
 async function addGalleryItem() {

@@ -111,40 +111,32 @@ async function editProduct(index) {
 }
 
 async function deleteProduct() {
-    const deleteName = prompt("Enter the Product Name to delete:");
+    try {
+        const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-    if (deleteName) {
-        const deleteData = {
-            nama: deleteName,
-        };
-
-        try {
-            const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(deleteData),
-            });
-
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-
-            const text = await response.text();
-            try {
-                const data = JSON.parse(text);
-                console.log("Delete Success:", data);
-            } catch (error) {
-                console.error("Error parsing JSON:", error);
-                console.log("Raw response:", text);
-            }
-        } catch (error) {
-            console.error("Fetch error:", error);
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
         }
+
+        const text = await response.text();
+        try {
+            const data = JSON.parse(text);
+            console.log("Delete Success:", data);
+            // Refresh the product list
+            loadProducts();
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+            console.log("Raw response:", text);
+        }
+    } catch (error) {
+        console.error("Fetch error:", error);
     }
 }
-
 async function addGalleryItem() {
     window.location.href = 'galleryform.html';
 }

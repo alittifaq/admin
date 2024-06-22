@@ -116,7 +116,14 @@ async function editProduct(productId) {
             throw new Error('Failed to fetch product data');
         }
 
-        const responseData = await response.json();
+        const text = await response.text();
+        let responseData;
+        try {
+            responseData = JSON.parse(text);
+        } catch (error) {
+            throw new Error('Error parsing JSON data');
+        }
+
         if (!responseData || Object.keys(responseData).length === 0) {
             throw new Error('Product data is empty or not in valid JSON format');
         }
@@ -167,6 +174,7 @@ async function editProduct(productId) {
         console.error('Error loading product:', error);
     }
 }
+
 
 
 async function deleteProduct(productName) {

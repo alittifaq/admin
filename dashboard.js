@@ -108,73 +108,35 @@ async function addProduct() {
     window.location.href = 'productform.html';
 }
 
-async function editProduct(productId) {
+async function editProductByName(productName, updatedProductData) {
     try {
-        // Fetch product data by ID
-        const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?id=${productId}`);
+        // Fetch product data by product name
+        const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?name=${encodeURIComponent(productName)}`);
         if (!response.ok) {
             throw new Error('Failed to fetch product data');
         }
 
-        const text = await response.text();
-        if (!text.trim()) {
-            throw new Error('Empty response received');
-        }
+        const productData = await response.json();
 
-        let productData;
-        try {
-            productData = JSON.parse(text);
-        } catch (error) {
-            throw new Error('Error parsing JSON data');
-        }
+        // Update product data with the updated data
+        const updatedData = { ...productData, ...updatedProductData };
 
-        if (!productData || Object.keys(productData).length === 0) {
-            throw new Error('Product data is empty or not in valid JSON format');
-        }
-
-        // Render the edit form with existing data
-        const formHtml = `
-            <h2>Edit Product</h2>
-            <form id="editProductForm">
-                <label for="foto">Foto:</label>
-                <input type="text" id="foto" name="foto" value="${productData.foto}" required>
-                <label for="deskripsi">Deskripsi:</label>
-                <textarea id="deskripsi" name="deskripsi" rows="4" cols="50" required>${productData.deskripsi}</textarea>
-                <button type="submit">Save Changes</button>
-            </form>
-        `;
-
-        // Append form to a container in your HTML (e.g., a div with id="editProductContainer")
-        const editProductContainer = document.getElementById('editProductContainer');
-        editProductContainer.innerHTML = formHtml;
-
-        // Add event listener to handle form submission
-        document.getElementById('editProductForm').addEventListener('submit', async function (event) {
-            event.preventDefault();
-
-            // Get updated data from the form
-            const updatedData = {
-                foto: document.getElementById('foto').value,
-                deskripsi: document.getElementById('deskripsi').value,
-            };
-
-            // Send PUT request to update the product
-            const updateResponse = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?id=${productId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedData),
-            });
-
-            if (!updateResponse.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const updatedProduct = await updateResponse.json();
-            console.log('Product updated successfully:', updatedProduct);
-            // Optionally, update the UI or perform other actions upon successful update
+        // Send PUT request to update the product
+        const updateResponse = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?name=${encodeURIComponent(productName)}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedData),
         });
+
+        if (!updateResponse.ok) {
+            throw new Error('Failed to update product');
+        }
+
+        const updatedProduct = await updateResponse.json();
+        console.log('Product updated successfully:', updatedProduct);
+        // Optionally, update the UI or perform other actions upon successful update
     } catch (error) {
         console.error('Error editing product:', error);
         // Handle errors, such as displaying an error message to the user

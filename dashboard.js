@@ -28,7 +28,7 @@ async function loadProducts() {
     `;
 
     try {
-        const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product');
+        const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq');
         const products = await response.json();
         const productTableBody = document.getElementById('product-table-body');
         products.forEach((product, index) => {
@@ -76,16 +76,15 @@ async function loadGallery() {
         const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery');
         const gallery = await response.json();
         const galleryTableBody = document.getElementById('gallery-table-body');
-        galleryTableBody.innerHTML = ''; // Clear existing content
         gallery.forEach((item, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><img src="${item.foto}" alt="${item.judul_kegiatan}" width="50"></td>
-                <td>${item.judul_kegiatan}</td>
+                <td><img src="${item.foto}" alt="${item.judul}" width="50"></td>
+                <td>${item.judul}</td>
                 <td>${item.tahun}</td>
                 <td>
                     <div class="action-buttons">
-                        <button onclick="editGalleryItem('${item.judul_kegiatan}')">Edit</button>
+                        <button onclick="editGalleryItem(${index})">Edit</button>
                         <button class="delete" onclick="deleteGalleryItem(${index})">Delete</button>
                     </div>
                 </td>
@@ -97,30 +96,12 @@ async function loadGallery() {
     }
 }
 
-function addGalleryItem() {
-    // Implement the function to add a gallery item
-}
-
-function editGalleryItem(index) {
-    // Implement the function to edit a gallery item
-}
-
-function deleteGalleryItem(index) {
-    // Implement the function to delete a gallery item
-}
-
-// Call the function to load gallery on page load
-loadGallery();
-
-
 function logout() {
     window.location.href = 'login.html';
 }
 
 async function addProduct() {
-    // Implementasi fungsi untuk menambah produk baru
-    alert('Add Product');
-    // Example: await fetch('/api/products', { method: 'POST', body: JSON.stringify(productData) });
+    window.location.href = 'productform.html';
 }
 
 async function editProduct(index) {
@@ -141,33 +122,39 @@ async function addGalleryItem() {
     // Example: await fetch('/api/gallery', { method: 'POST', body: JSON.stringify(galleryData) });
 }
 
-async function editGalleryItem(judulKegiatan) {
+async function editGalleryItem(index) {
     try {
-        const response = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/detail', {
+        // Get the updated gallery item data (e.g., from a form)
+        const galleryItemData = {
+            // Fill in with appropriate data structure
+            // Example:
+            name: document.getElementById(`galleryItemName-${index}`).value,
+            description: document.getElementById(`galleryItemDescription-${index}`).value,
+            // Add other fields as necessary
+        };
+
+        // Send a PUT request to the backend API with the updated data
+        const response = await fetch(`/api/gallery/${index}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                Foto: fotoKegiatan,
-                judul_kegiatan: judulKegiatan,
-                tahun: 2025,
-                deskripsi: 'Deskripsi Kegiatan Baru',
-                // tambahkan properti lain yang ingin diubah
-            })
+            body: JSON.stringify(galleryItemData)
         });
+
+        // Handle the response
         if (response.ok) {
-            alert(`Item galeri dengan judul kegiatan '${judulKegiatan}' berhasil diubah.`);
-            loadGallery(); // Muat ulang galeri setelah mengedit
+            const updatedItem = await response.json();
+            console.log('Gallery item updated:', updatedItem);
+            // Optionally, update the UI with the new data
         } else {
-            throw new Error('Gagal mengubah item galeri.');
+            const errorText = await response.text();
+            console.error('Failed to update gallery item:', errorText);
         }
     } catch (error) {
-        console.error('Error editing gallery item:', error);
-        alert('Terjadi kesalahan saat mengedit item galeri.');
+        console.error('Error:', error);
     }
 }
-
 
 
 async function deleteGalleryItem(index) {

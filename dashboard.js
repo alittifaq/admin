@@ -117,9 +117,7 @@ async function deleteProduct(index) {
 }
 
 async function addGalleryItem() {
-    // Implementasi fungsi untuk menambah item galeri baru
-    alert('Add Gallery Item');
-    // Example: await fetch('/api/gallery', { method: 'POST', body: JSON.stringify(galleryData) });
+    window.location.href = 'galleryform.html';
 }
 
 async function editGalleryItem(index) {

@@ -112,7 +112,14 @@ async function editProduct(productId) {
     try {
         // Fetch the product data by ID
         const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productId}`);
-        const product = await response.json();
+        if (!response.ok) {
+            throw new Error('Failed to fetch product data');
+        }
+
+        const responseData = await response.json();
+        if (!responseData || Object.keys(responseData).length === 0) {
+            throw new Error('Product data is empty or not in valid JSON format');
+        }
 
         // Fill the form with the product data
         const content = document.getElementById('content');
@@ -120,9 +127,9 @@ async function editProduct(productId) {
             <h2>Edit Product</h2>
             <form id="edit-product-form">
                 <label for="foto">Foto:</label>
-                <input type="text" id="foto" name="foto" value="${product.foto}" required>
+                <input type="text" id="foto" name="foto" value="${responseData.foto}" required>
                 <label for="nama">Nama Produk:</label>
-                <input type="text" id="nama" name="nama" value="${product.nama}" required>
+                <input type="text" id="nama" name="nama" value="${responseData.nama}" required>
                 <button type="submit">Save Changes</button>
             </form>
         `;
@@ -160,10 +167,6 @@ async function editProduct(productId) {
         console.error('Error loading product:', error);
     }
 }
-
-document.getElementById('products-tab').addEventListener('click', function() {
-    loadProducts();
-});
 
 
 async function deleteProduct(productName) {

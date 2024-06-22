@@ -108,11 +108,63 @@ async function addProduct() {
     window.location.href = 'productform.html';
 }
 
-async function editProduct(index) {
-    // Implementasi fungsi untuk mengedit produk
-    alert(`Edit Product ${index}`);
-    // Example: await fetch(`/api/products/${index}`, { method: 'PUT', body: JSON.stringify(productData) });
+async function editProduct(productId) {
+    try {
+        // Fetch the product data by ID
+        const response = await fetch(`https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productId}`);
+        const product = await response.json();
+
+        // Fill the form with the product data
+        const content = document.getElementById('content');
+        content.innerHTML = `
+            <h2>Edit Product</h2>
+            <form id="edit-product-form">
+                <label for="foto">Foto:</label>
+                <input type="text" id="foto" name="foto" value="${product.foto}" required>
+                <label for="nama">Nama Produk:</label>
+                <input type="text" id="nama" name="nama" value="${product.nama}" required>
+                <button type="submit">Save Changes</button>
+            </form>
+        `;
+
+        document.getElementById('edit-product-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const updatedProduct = {
+                _id: productId,
+                foto: document.getElementById('foto').value,
+                nama: document.getElementById('nama').value
+            };
+
+            try {
+                const updateResponse = await fetch('https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedProduct),
+                });
+
+                if (!updateResponse.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const updatedData = await updateResponse.json();
+                console.log('Product updated successfully:', updatedData);
+                loadProducts(); // Refresh the product list
+            } catch (error) {
+                console.error('Error updating product:', error);
+            }
+        });
+    } catch (error) {
+        console.error('Error loading product:', error);
+    }
 }
+
+document.getElementById('products-tab').addEventListener('click', function() {
+    loadProducts();
+});
+
 
 async function deleteProduct(productName) {
     try {

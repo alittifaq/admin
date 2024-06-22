@@ -117,7 +117,7 @@ async function editProduct(productId) {
         }
 
         const text = await response.text();
-        if (!text) {
+        if (!text.trim()) {
             throw new Error('Empty response received');
         }
 
@@ -178,7 +178,6 @@ async function editProduct(productId) {
         console.error('Error loading product:', error);
     }
 }
-
 
 
 

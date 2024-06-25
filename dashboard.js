@@ -191,6 +191,48 @@ async function addGalleryItem() {
   window.location.href = "galleryform.html";
 }
 
+async function editGalleryItem() {
+  var editName = prompt("Enter the Judul Kegiatan to edit:");
+
+  if (editName) {
+    var editData = {
+      foto: document.getElementById("foto").value,
+      judul_kegiatan: document.getElementById("judul_kegiatan").value,
+      tahun: document.getElementById("tahun").value,
+      name: editName,
+    };
+
+    fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editData),
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.text(); // Use text() to get raw response
+      })
+      .then((text) => {
+        try {
+          const data = JSON.parse(text); // Try to parse JSON
+          console.log("Edit Success:", data);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          console.log("Raw response:", text); // Log raw response for debugging
+        }
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
+  }
+}
+
 async function deleteGalleryItem(galleryTitle) {
   try {
     const deleteData = {

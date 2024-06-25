@@ -110,31 +110,36 @@ async function addProduct() {
   window.location.href = "productform.html";
 }
 
-async function editProduct() {
-  var editName = prompt("Masukkan Nama Produk yang ingin diedit:", productName);
+async function editProduct(productName) {
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`
+    );
+    const product = await response.json();
 
-  if (editName) {
     // Tampilkan form edit untuk mengisi data baru
     const formHTML = `
       <div id="edit-product-form">
-        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto">
-        <label>Nama:</label><input type="text" id="nama" placeholder="Nama Produk">
-        <button onclick="submitEditProduct('${editName}')">Submit</button>
+        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto" value="${product.foto}">
+        <label>Nama:</label><input type="text" id="nama" placeholder="Nama Produk" value="${product.nama}">
+        <button onclick="submitEditProduct('${productName}')">Submit</button>
       </div>
     `;
     document.getElementById("content").innerHTML = formHTML;
+  } catch (error) {
+    console.error("Error loading product for edit:", error);
+    alert("Gagal memuat produk untuk diedit. Silakan coba lagi.");
   }
 }
 
-async function submitEditProduct(editName) {
+async function submitEditProduct(productName) {
   var editData = {
     foto: document.getElementById("foto").value,
     nama: document.getElementById("nama").value,
-    name: editName,
   };
 
   fetch(
-    `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
+    `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`,
     {
       method: "PUT",
       headers: {
@@ -210,36 +215,38 @@ async function addGalleryItem() {
   window.location.href = "galleryform.html";
 }
 
-async function editGalleryItem() {
-  var editName = prompt(
-    "Masukkan Judul Kegiatan yang ingin diedit:",
-    galleryTitle
-  );
+async function editGalleryItem(galleryTitle) {
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`
+    );
+    const galleryItem = await response.json();
 
-  if (editName) {
     // Tampilkan form edit untuk mengisi data baru
     const formHTML = `
       <div id="edit-gallery-form">
-        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto">
-        <label>Judul Kegiatan:</label><input type="text" id="judul_kegiatan" placeholder="Judul Kegiatan">
-        <label>Tahun:</label><input type="text" id="tahun" placeholder="Tahun">
-        <button onclick="submitEditGalleryItem('${editName}')">Submit</button>
+        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto" value="${galleryItem.foto}">
+        <label>Judul Kegiatan:</label><input type="text" id="judul_kegiatan" placeholder="Judul Kegiatan" value="${galleryItem.judul_kegiatan}">
+        <label>Tahun:</label><input type="text" id="tahun" placeholder="Tahun" value="${galleryItem.tahun}">
+        <button onclick="submitEditGalleryItem('${galleryTitle}')">Submit</button>
       </div>
     `;
     document.getElementById("content").innerHTML = formHTML;
+  } catch (error) {
+    console.error("Error loading gallery item for edit:", error);
+    alert("Gagal memuat galeri untuk diedit. Silakan coba lagi.");
   }
 }
 
-async function submitEditGalleryItem(editName) {
+async function submitEditGalleryItem(galleryTitle) {
   var editData = {
     foto: document.getElementById("foto").value,
     judul_kegiatan: document.getElementById("judul_kegiatan").value,
     tahun: document.getElementById("tahun").value,
-    name: editName,
   };
 
   fetch(
-    `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery`,
+    `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`,
     {
       method: "PUT",
       headers: {

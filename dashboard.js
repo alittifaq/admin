@@ -116,13 +116,18 @@ async function editProduct(productName) {
       `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`
     );
 
+    const text = await response.text(); // Dapatkan teks mentah dari respons
+    console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
+
     if (!response.ok) {
-      const text = await response.text(); // Tambahan untuk menampilkan respons teks
-      console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const product = await response.json();
+    if (text.trim() === "") {
+      throw new Error("Received empty response");
+    }
+
+    const product = JSON.parse(text); // Parse teks sebagai JSON
 
     // Tampilkan form edit untuk mengisi data baru
     const formHTML = `
@@ -138,6 +143,7 @@ async function editProduct(productName) {
     alert("Gagal memuat produk untuk diedit. Silakan coba lagi.");
   }
 }
+
 
 async function submitEditProduct(productName) {
   var editData = {
@@ -228,13 +234,18 @@ async function editGalleryItem(galleryTitle) {
       `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`
     );
 
+    const text = await response.text(); // Dapatkan teks mentah dari respons
+    console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
+
     if (!response.ok) {
-      const text = await response.text(); // Tambahan untuk menampilkan respons teks
-      console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const galleryItem = await response.json();
+    if (text.trim() === "") {
+      throw new Error("Received empty response");
+    }
+
+    const galleryItem = JSON.parse(text); // Parse teks sebagai JSON
 
     // Tampilkan form edit untuk mengisi data baru
     const formHTML = `
@@ -251,6 +262,7 @@ async function editGalleryItem(galleryTitle) {
     alert("Gagal memuat galeri untuk diedit. Silakan coba lagi.");
   }
 }
+
 
 
 async function submitEditGalleryItem(galleryTitle) {

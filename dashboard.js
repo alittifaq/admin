@@ -111,47 +111,60 @@ async function addProduct() {
 }
 
 async function editProduct() {
-  var editName = prompt("Enter the Product Name to edit:");
+  var editName = prompt("Masukkan Nama Produk yang ingin diedit:", productName);
 
   if (editName) {
-    var editData = {
-      foto: document.getElementById("foto").value,
-      nama: document.getElementById("nama").value,
-      name: editName,
-    };
-
-    fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editData),
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.text(); // Use text() to get raw response
-      })
-      .then((text) => {
-        try {
-          const data = JSON.parse(text); // Try to parse JSON
-          console.log("Edit Success:", data);
-          alert("Produk berhasil diedit, mantul!");
-        } catch (error) {
-          console.error("Error parsing JSON:", error);
-          console.log("Raw response:", text); // Log raw response for debugging
-          alert("Yah, edit produk nggak berhasil.");
-        }
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        alert("Yah, edit produk nggak berhasil.");
-      });
+    // Tampilkan form edit untuk mengisi data baru
+    const formHTML = `
+      <div id="edit-product-form">
+        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto">
+        <label>Nama:</label><input type="text" id="nama" placeholder="Nama Produk">
+        <button onclick="submitEditProduct('${editName}')">Submit</button>
+      </div>
+    `;
+    document.getElementById("content").innerHTML = formHTML;
   }
+}
+
+async function submitEditProduct(editName) {
+  var editData = {
+    foto: document.getElementById("foto").value,
+    nama: document.getElementById("nama").value,
+    name: editName,
+  };
+
+  fetch(
+    `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editData),
+    }
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.text(); // Use text() to get raw response
+    })
+    .then((text) => {
+      try {
+        const data = JSON.parse(text); // Try to parse JSON
+        console.log("Edit Success:", data);
+        alert("Produk berhasil diedit, mantul!");
+        loadProducts(); // Refresh the product list
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        console.log("Raw response:", text); // Log raw response for debugging
+        alert("Yah, edit produk nggak berhasil.");
+      }
+    })
+    .catch((error) => {
+      console.error("Fetch error:", error);
+      alert("Yah, edit produk nggak berhasil.");
+    });
 }
 
 async function deleteProduct(productTitle) {
@@ -198,48 +211,65 @@ async function addGalleryItem() {
 }
 
 async function editGalleryItem() {
-  var editName = prompt("Enter the Judul Kegiatan to edit:");
+  var editName = prompt(
+    "Masukkan Judul Kegiatan yang ingin diedit:",
+    galleryTitle
+  );
 
   if (editName) {
-    var editData = {
-      foto: document.getElementById("foto").value,
-      judul_kegiatan: document.getElementById("judul_kegiatan").value,
-      tahun: document.getElementById("tahun").value,
-      name: editName,
-    };
-
-    fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editData),
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.text(); // Use text() to get raw response
-      })
-      .then((text) => {
-        try {
-          const data = JSON.parse(text); // Try to parse JSON
-          console.log("Edit Success:", data);
-          alert("Galeri berhasil diedit, asik!");
-        } catch (error) {
-          console.error("Error parsing JSON:", error);
-          console.log("Raw response:", text); // Log raw response for debugging
-          alert("Yah, edit galeri nggak berhasil.");
-        }
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-        alert("Yah, edit galeri nggak berhasil.");
-      });
+    // Tampilkan form edit untuk mengisi data baru
+    const formHTML = `
+      <div id="edit-gallery-form">
+        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto">
+        <label>Judul Kegiatan:</label><input type="text" id="judul_kegiatan" placeholder="Judul Kegiatan">
+        <label>Tahun:</label><input type="text" id="tahun" placeholder="Tahun">
+        <button onclick="submitEditGalleryItem('${editName}')">Submit</button>
+      </div>
+    `;
+    document.getElementById("content").innerHTML = formHTML;
   }
+}
+
+async function submitEditGalleryItem(editName) {
+  var editData = {
+    foto: document.getElementById("foto").value,
+    judul_kegiatan: document.getElementById("judul_kegiatan").value,
+    tahun: document.getElementById("tahun").value,
+    name: editName,
+  };
+
+  fetch(
+    `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editData),
+    }
+  )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.text(); // Use text() to get raw response
+    })
+    .then((text) => {
+      try {
+        const data = JSON.parse(text); // Try to parse JSON
+        console.log("Edit Success:", data);
+        alert("Galeri berhasil diedit, asik!");
+        loadGallery(); // Refresh the gallery list
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+        console.log("Raw response:", text); // Log raw response for debugging
+        alert("Yah, edit galeri nggak berhasil.");
+      }
+    })
+    .catch((error) => {
+      console.error("Fetch error:", error);
+      alert("Yah, edit galeri nggak berhasil.");
+    });
 }
 
 async function deleteGalleryItem(galleryTitle) {

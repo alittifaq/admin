@@ -117,10 +117,17 @@ async function editProduct(productName) {
     );
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const product = await response.json();
+    const text = await response.text();
+
+    // Handle case where response is empty
+    if (!text.trim()) {
+      throw new Error("Empty response from server");
+    }
+
+    const product = JSON.parse(text);
 
     const formHTML = `
       <div id="edit-product-form">
@@ -228,7 +235,14 @@ async function editGalleryItem(galleryTitle) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const galleryItem = await response.json();
+    const text = await response.text();
+
+    // Handle case where response is empty
+    if (!text.trim()) {
+      throw new Error("Empty response from server");
+    }
+
+    const galleryItem = JSON.parse(text);
 
     // Tampilkan form edit untuk mengisi data baru
     const formHTML = `

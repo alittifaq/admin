@@ -14,7 +14,7 @@ const target_url =
 
 function uploadImage() {
   if (!getValue("imageInput")) {
-    alert("Please select an image file");
+    alert("Pilih file gambar dulu, ya!");
     return;
   }
   hide("inputfile");
@@ -25,6 +25,7 @@ function uploadImage() {
 
 function renderToHtml(result) {
   console.log(result);
-  setInner("isi", "https://cdn.blkkalittifaq.id/"+result.response);
+  alert("Yay! Berhasil upload gambar!");
+  setInner("isi", "https://cdn.blkkalittifaq.id/" + result.response);
   show("inputfile");
 }

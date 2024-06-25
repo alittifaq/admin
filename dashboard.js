@@ -115,6 +115,11 @@ async function editProduct(productName) {
     const response = await fetch(
       `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`
     );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     const product = await response.json();
 
     // Tampilkan form edit untuk mengisi data baru
@@ -128,6 +133,8 @@ async function editProduct(productName) {
     document.getElementById("content").innerHTML = formHTML;
   } catch (error) {
     console.error("Error loading product for edit:", error);
+    const text = await response.text();
+    console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
     alert("Gagal memuat produk untuk diedit. Silakan coba lagi.");
   }
 }
@@ -220,6 +227,11 @@ async function editGalleryItem(galleryTitle) {
     const response = await fetch(
       `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`
     );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     const galleryItem = await response.json();
 
     // Tampilkan form edit untuk mengisi data baru
@@ -234,6 +246,8 @@ async function editGalleryItem(galleryTitle) {
     document.getElementById("content").innerHTML = formHTML;
   } catch (error) {
     console.error("Error loading gallery item for edit:", error);
+    const text = await response.text();
+    console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
     alert("Gagal memuat galeri untuk diedit. Silakan coba lagi.");
   }
 }

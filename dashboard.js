@@ -112,22 +112,24 @@ async function addProduct() {
 
 async function editProduct(productName) {
   try {
+    const editData = {
+      nama: productName.toString(), // Convert productTitle to string
+    };
+
     const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editData),
+      }
     );
 
-    const text = await response.text(); // Dapatkan teks mentah dari respons
-    console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
-
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error("Network response was not ok");
     }
-
-    if (text.trim() === "") {
-      throw new Error("Received empty response");
-    }
-
-    const product = JSON.parse(text); // Parse teks sebagai JSON
 
     // Tampilkan form edit untuk mengisi data baru
     const formHTML = `
@@ -143,7 +145,6 @@ async function editProduct(productName) {
     alert("Gagal memuat produk untuk diedit. Silakan coba lagi.");
   }
 }
-
 
 async function submitEditProduct(productName) {
   var editData = {
@@ -262,8 +263,6 @@ async function editGalleryItem(galleryTitle) {
     alert("Gagal memuat galeri untuk diedit. Silakan coba lagi.");
   }
 }
-
-
 
 async function submitEditGalleryItem(galleryTitle) {
   var editData = {

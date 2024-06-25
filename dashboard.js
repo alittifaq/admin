@@ -140,13 +140,16 @@ async function editProduct() {
         try {
           const data = JSON.parse(text); // Try to parse JSON
           console.log("Edit Success:", data);
+          alert("Produk berhasil diedit, mantul!");
         } catch (error) {
           console.error("Error parsing JSON:", error);
           console.log("Raw response:", text); // Log raw response for debugging
+          alert("Yah, edit produk nggak berhasil.");
         }
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        alert("Yah, edit produk nggak berhasil.");
       });
   }
 }
@@ -176,14 +179,17 @@ async function deleteProduct(productTitle) {
     try {
       const data = JSON.parse(text);
       console.log("Delete Success:", data);
+      alert("Produk berhasil dihapus, beres!");
       // Refresh the product list
       loadProducts(); // Call loadProduct to refresh the list
     } catch (error) {
       console.error("Error parsing JSON:", error);
       console.log("Raw response:", text);
+      alert("Gagal hapus produk, coba lagi ya!");
     }
   } catch (error) {
     console.error("Fetch error:", error);
+    alert("Gagal hapus produk, coba lagi ya!");
   }
 }
 
@@ -222,13 +228,16 @@ async function editGalleryItem() {
         try {
           const data = JSON.parse(text); // Try to parse JSON
           console.log("Edit Success:", data);
+          alert("Galeri berhasil diedit, asik!");
         } catch (error) {
           console.error("Error parsing JSON:", error);
           console.log("Raw response:", text); // Log raw response for debugging
+          alert("Yah, edit galeri nggak berhasil.");
         }
       })
       .catch((error) => {
         console.error("Fetch error:", error);
+        alert("Yah, edit galeri nggak berhasil.");
       });
   }
 }
@@ -258,13 +267,16 @@ async function deleteGalleryItem(galleryTitle) {
     try {
       const data = JSON.parse(text);
       console.log("Delete Success:", data);
+      alert("Galeri berhasil dihapus, beres!");
       // Refresh the gallery list
       loadGallery(); // Call loadGallery to refresh the list
     } catch (error) {
       console.error("Error parsing JSON:", error);
       console.log("Raw response:", text);
+      alert("Gagal hapus galeri, coba lagi ya!");
     }
   } catch (error) {
     console.error("Fetch error:", error);
+    alert("Gagal hapus galeri, coba lagi ya!");
   }
 }

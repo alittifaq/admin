@@ -70,13 +70,16 @@
               try {
                 const data = JSON.parse(text); // Try to parse JSON
                 console.log("Success:", data);
+                alert("Produk baru sudah masuk, mantap!");
               } catch (error) {
                 console.error("Error parsing JSON:", error);
                 console.log("Raw response:", text); // Log raw response for debugging
+                alert("Produk gagal ditambah, cek lagi ya!");
               }
             })
             .catch((error) => {
               console.error("Fetch error:", error);
+              alert("Produk gagal ditambah, cek lagi ya!");
             });
         });
 
@@ -112,13 +115,16 @@
                 try {
                   const data = JSON.parse(text); // Try to parse JSON
                   console.log("Edit Success:", data);
+                  alert("Produk berhasil diedit, mantul!");
                 } catch (error) {
                   console.error("Error parsing JSON:", error);
                   console.log("Raw response:", text); // Log raw response for debugging
+                  alert("Yah, edit produk nggak berhasil.");
                 }
               })
               .catch((error) => {
                 console.error("Fetch error:", error);
+                alert("Yah, edit produk nggak berhasil.");
               });
           }
         });
@@ -153,13 +159,16 @@
                 try {
                   const data = JSON.parse(text); // Try to parse JSON
                   console.log("Delete Success:", data);
+                  alert("Produk sudah dihapus, sip!");
                 } catch (error) {
                   console.error("Error parsing JSON:", error);
                   console.log("Raw response:", text); // Log raw response for debugging
+                  alert("Gagal hapus produk, coba lagi ya!");
                 }
               })
               .catch((error) => {
                 console.error("Fetch error:", error);
+                alert("Gagal hapus produk, coba lagi ya!");
               });
           }
         });

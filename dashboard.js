@@ -112,26 +112,16 @@ async function addProduct() {
 
 async function editProduct(productName) {
   try {
-    const editData = {
-      nama: productName.toString(), // Convert productTitle to string
-    };
-
     const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editData),
-      }
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`
     );
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
 
-    // Tampilkan form edit untuk mengisi data baru
+    const product = await response.json();
+
     const formHTML = `
       <div id="edit-product-form">
         <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto" value="${product.foto}">
@@ -152,38 +142,37 @@ async function submitEditProduct(productName) {
     nama: document.getElementById("nama").value,
   };
 
-  fetch(
-    `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(editData),
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
     }
-  )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.text(); // Use text() to get raw response
-    })
-    .then((text) => {
-      try {
-        const data = JSON.parse(text); // Try to parse JSON
-        console.log("Edit Success:", data);
-        alert("Produk berhasil diedit, mantul!");
-        loadProducts(); // Refresh the product list
-      } catch (error) {
-        console.error("Error parsing JSON:", error);
-        console.log("Raw response:", text); // Log raw response for debugging
-        alert("Yah, edit produk nggak berhasil.");
-      }
-    })
-    .catch((error) => {
-      console.error("Fetch error:", error);
+
+    const text = await response.text();
+    try {
+      const data = JSON.parse(text);
+      console.log("Edit Success:", data);
+      alert("Produk berhasil diedit, mantul!");
+      loadProducts(); // Refresh the product list
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      console.log("Raw response:", text);
       alert("Yah, edit produk nggak berhasil.");
-    });
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
+    alert("Yah, edit produk nggak berhasil.");
+  }
 }
 
 async function deleteProduct(productTitle) {
@@ -235,18 +224,11 @@ async function editGalleryItem(galleryTitle) {
       `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`
     );
 
-    const text = await response.text(); // Dapatkan teks mentah dari respons
-    console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
-
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    if (text.trim() === "") {
-      throw new Error("Received empty response");
-    }
-
-    const galleryItem = JSON.parse(text); // Parse teks sebagai JSON
+    const galleryItem = await response.json();
 
     // Tampilkan form edit untuk mengisi data baru
     const formHTML = `
@@ -271,38 +253,37 @@ async function submitEditGalleryItem(galleryTitle) {
     tahun: document.getElementById("tahun").value,
   };
 
-  fetch(
-    `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(editData),
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
     }
-  )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.text(); // Use text() to get raw response
-    })
-    .then((text) => {
-      try {
-        const data = JSON.parse(text); // Try to parse JSON
-        console.log("Edit Success:", data);
-        alert("Galeri berhasil diedit, asik!");
-        loadGallery(); // Refresh the gallery list
-      } catch (error) {
-        console.error("Error parsing JSON:", error);
-        console.log("Raw response:", text); // Log raw response for debugging
-        alert("Yah, edit galeri nggak berhasil.");
-      }
-    })
-    .catch((error) => {
-      console.error("Fetch error:", error);
+
+    const text = await response.text();
+    try {
+      const data = JSON.parse(text);
+      console.log("Edit Success:", data);
+      alert("Galeri berhasil diedit, asik!");
+      loadGallery(); // Refresh the gallery list
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      console.log("Raw response:", text);
       alert("Yah, edit galeri nggak berhasil.");
-    });
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
+    alert("Yah, edit galeri nggak berhasil.");
+  }
 }
 
 async function deleteGalleryItem(galleryTitle) {

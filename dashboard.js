@@ -117,6 +117,8 @@ async function editProduct(productName) {
     );
 
     if (!response.ok) {
+      const text = await response.text(); // Tambahan untuk menampilkan respons teks
+      console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
@@ -133,8 +135,6 @@ async function editProduct(productName) {
     document.getElementById("content").innerHTML = formHTML;
   } catch (error) {
     console.error("Error loading product for edit:", error);
-    const text = await response.text();
-    console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
     alert("Gagal memuat produk untuk diedit. Silakan coba lagi.");
   }
 }
@@ -229,6 +229,8 @@ async function editGalleryItem(galleryTitle) {
     );
 
     if (!response.ok) {
+      const text = await response.text(); // Tambahan untuk menampilkan respons teks
+      console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
@@ -246,11 +248,10 @@ async function editGalleryItem(galleryTitle) {
     document.getElementById("content").innerHTML = formHTML;
   } catch (error) {
     console.error("Error loading gallery item for edit:", error);
-    const text = await response.text();
-    console.log("Raw response:", text); // Tampilkan respons sebagai teks untuk memeriksa isinya
     alert("Gagal memuat galeri untuk diedit. Silakan coba lagi.");
   }
 }
+
 
 async function submitEditGalleryItem(galleryTitle) {
   var editData = {

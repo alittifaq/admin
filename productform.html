@@ -37,7 +37,18 @@
         </form>
       </div>
     </div>
-    <div id="content"></div>
+     <!-- Modal for editing product -->
+     <div id="editProductModal" class="modal">
+      <div class="modal-content">
+          <span class="close" onclick="closeModal('editProductModal')">&times;</span>
+          <h2>Edit Product</h2>
+          <label for="editProductFoto">Foto:</label>
+          <input type="text" id="editProductFoto">
+          <label for="editProductNama">Nama:</label>
+          <input type="text" id="editProductNama">
+          <button onclick="submitEditProduct()">Submit</button>
+      </div>
+  </div>
     <script type="module" src="./index.js"></script>
 
     <script>

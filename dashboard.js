@@ -41,7 +41,7 @@ async function loadProducts() {
                 <td>${product.nama}</td>
                 <td>
                     <div class="action-buttons">
-                        <button onclick="editProduct('${product.nama}')">Edit</button>
+                        <button class="edit" onclick="editProduct('${product.nama}')">Edit</button>
                         <button class="delete" onclick="deleteProduct('${product.nama}')">Delete</button>
                     </div>
                 </td>
@@ -110,48 +110,32 @@ async function addProduct() {
   window.location.href = "productform.html";
 }
 
-async function editProduct(productName) {
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const text = await response.text();
-
-    // Handle case where response is empty
-    if (!text.trim()) {
-      throw new Error("Empty response from server");
-    }
-
-    const product = JSON.parse(text);
-
-    const formHTML = `
-      <div id="edit-product-form">
-        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto" value="${product.foto}">
-        <label>Nama:</label><input type="text" id="nama" placeholder="Nama Produk" value="${product.nama}">
-        <button onclick="submitEditProduct('${productName}')">Submit</button>
-      </div>
-    `;
-    document.getElementById("content").innerHTML = formHTML;
-  } catch (error) {
-    console.error("Error loading product for edit:", error);
-    alert("Gagal memuat produk untuk diedit. Silakan coba lagi.");
-  }
+function openEditProductModal(product) {
+  document.getElementById("editProductFoto").value = product.foto;
+  document.getElementById("editProductNama").value = product.nama;
+  document.getElementById("editProductModal").style.display = "block";
 }
 
-async function submitEditProduct(productName) {
-  var editData = {
-    foto: document.getElementById("foto").value,
-    nama: document.getElementById("nama").value,
+function openEditGalleryModal(gallery) {
+  document.getElementById("editGalleryFoto").value = gallery.foto;
+  document.getElementById("editGalleryJudul").value = gallery.judul_kegiatan;
+  document.getElementById("editGalleryTahun").value = gallery.tahun;
+  document.getElementById("editGalleryModal").style.display = "block";
+}
+
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = "none";
+}
+
+async function submitEditProduct() {
+  const editData = {
+    foto: document.getElementById("editProductFoto").value,
+    nama: document.getElementById("editProductNama").value,
   };
 
   try {
     const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productName}`,
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${editData.nama}`,
       {
         method: "PUT",
         headers: {
@@ -165,20 +149,48 @@ async function submitEditProduct(productName) {
       throw new Error("Network response was not ok");
     }
 
-    const text = await response.text();
-    try {
-      const data = JSON.parse(text);
-      console.log("Edit Success:", data);
-      alert("Produk berhasil diedit, mantul!");
-      loadProducts(); // Refresh the product list
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-      console.log("Raw response:", text);
-      alert("Yah, edit produk nggak berhasil.");
-    }
+    const data = await response.json();
+    console.log("Edit Success:", data);
+    alert("Produk berhasil diedit, mantul!");
+    closeModal("editProductModal");
+    loadProducts(); // Refresh the product list
   } catch (error) {
     console.error("Fetch error:", error);
     alert("Yah, edit produk nggak berhasil.");
+  }
+}
+
+async function submitEditGalleryItem() {
+  const editData = {
+    foto: document.getElementById("editGalleryFoto").value,
+    judul_kegiatan: document.getElementById("editGalleryJudul").value,
+    tahun: document.getElementById("editGalleryTahun").value,
+  };
+
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${editData.judul_kegiatan}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    console.log("Edit Success:", data);
+    alert("Galeri berhasil diedit, asik!");
+    closeModal("editGalleryModal");
+    loadGallery(); // Refresh the gallery list
+  } catch (error) {
+    console.error("Fetch error:", error);
+    alert("Yah, edit galeri nggak berhasil.");
   }
 }
 
@@ -223,81 +235,6 @@ async function deleteProduct(productTitle) {
 
 async function addGalleryItem() {
   window.location.href = "galleryform.html";
-}
-
-async function editGalleryItem(galleryTitle) {
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const text = await response.text();
-
-    // Handle case where response is empty
-    if (!text.trim()) {
-      throw new Error("Empty response from server");
-    }
-
-    const galleryItem = JSON.parse(text);
-
-    // Tampilkan form edit untuk mengisi data baru
-    const formHTML = `
-      <div id="edit-gallery-form">
-        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto" value="${galleryItem.foto}">
-        <label>Judul Kegiatan:</label><input type="text" id="judul_kegiatan" placeholder="Judul Kegiatan" value="${galleryItem.judul_kegiatan}">
-        <label>Tahun:</label><input type="text" id="tahun" placeholder="Tahun" value="${galleryItem.tahun}">
-        <button onclick="submitEditGalleryItem('${galleryTitle}')">Submit</button>
-      </div>
-    `;
-    document.getElementById("content").innerHTML = formHTML;
-  } catch (error) {
-    console.error("Error loading gallery item for edit:", error);
-    alert("Gagal memuat galeri untuk diedit. Silakan coba lagi.");
-  }
-}
-
-async function submitEditGalleryItem(galleryTitle) {
-  var editData = {
-    foto: document.getElementById("foto").value,
-    judul_kegiatan: document.getElementById("judul_kegiatan").value,
-    tahun: document.getElementById("tahun").value,
-  };
-
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editData),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const text = await response.text();
-    try {
-      const data = JSON.parse(text);
-      console.log("Edit Success:", data);
-      alert("Galeri berhasil diedit, asik!");
-      loadGallery(); // Refresh the gallery list
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-      console.log("Raw response:", text);
-      alert("Yah, edit galeri nggak berhasil.");
-    }
-  } catch (error) {
-    console.error("Fetch error:", error);
-    alert("Yah, edit galeri nggak berhasil.");
-  }
 }
 
 async function deleteGalleryItem(galleryTitle) {

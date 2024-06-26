@@ -29,15 +29,12 @@
             <tr>
               <td colspan="2" class="center">
                 <input type="submit" value="Submit" />
-                <button type="button" id="editButton">Edit</button>
-                <button type="button" id="deleteButton">Delete</button>
               </td>
             </tr>
           </table>
         </form>
       </div>
     </div>
-
     <script type="module" src="./index.js"></script>
 
     <script>
@@ -46,19 +43,20 @@
         .addEventListener("submit", function (event) {
           event.preventDefault(); // Prevent the form from submitting normally
 
-          var formData = {
+          var editData = {
             foto: document.getElementById("foto").value,
             nama: document.getElementById("nama").value,
-          }; // Create JavaScript object to represent form data
+            name: editName,
+          }; // Create JavaScript object to represent edit data
 
           fetch(
             "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
             {
-              method: "POST",
+              method: "PUT",
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(formData), // Convert JavaScript object to JSON string
+              body: JSON.stringify(editData), // Convert JavaScript object to JSON string
             }
           )
             .then((response) => {
@@ -70,64 +68,18 @@
             .then((text) => {
               try {
                 const data = JSON.parse(text); // Try to parse JSON
-                console.log("Success:", data);
-                alert("Produk baru sudah masuk, mantap!");
+                console.log("Edit Success:", data);
+                alert("Produk berhasil diedit, mantul!");
               } catch (error) {
                 console.error("Error parsing JSON:", error);
                 console.log("Raw response:", text); // Log raw response for debugging
-                alert("Produk gagal ditambah, cek lagi ya!");
+                alert("Yah, edit produk nggak berhasil.");
               }
             })
             .catch((error) => {
               console.error("Fetch error:", error);
-              alert("Produk gagal ditambah, cek lagi ya!");
+              alert("Yah, edit produk nggak berhasil.");
             });
-        });
-
-      document
-        .getElementById("editButton")
-        .addEventListener("click", function () {
-          var editName = prompt("Enter the Product Name to edit:");
-
-          if (editName) {
-            var editData = {
-              foto: document.getElementById("foto").value,
-              nama: document.getElementById("nama").value,
-              name: editName,
-            };
-
-            fetch(
-              `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
-              {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(editData), // Convert JavaScript object to JSON string
-              }
-            )
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Network response was not ok");
-                }
-                return response.text(); // Use text() to get raw response
-              })
-              .then((text) => {
-                try {
-                  const data = JSON.parse(text); // Try to parse JSON
-                  console.log("Edit Success:", data);
-                  alert("Produk berhasil diedit, mantul!");
-                } catch (error) {
-                  console.error("Error parsing JSON:", error);
-                  console.log("Raw response:", text); // Log raw response for debugging
-                  alert("Yah, edit produk nggak berhasil.");
-                }
-              })
-              .catch((error) => {
-                console.error("Fetch error:", error);
-                alert("Yah, edit produk nggak berhasil.");
-              });
-          }
         });
     </script>
   </body>

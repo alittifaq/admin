@@ -41,7 +41,7 @@ async function loadProducts() {
                 <td>${product.nama}</td>
                 <td>
                     <div class="action-buttons">
-                        <button class="edit" onclick="editProduct('${product.nama}')">Edit</button>
+                        <button onclick="editProduct()">Edit</button>
                         <button class="delete" onclick="deleteProduct('${product.nama}')">Delete</button>
                     </div>
                 </td>
@@ -90,7 +90,7 @@ async function loadGallery() {
                 <td>${item.tahun}</td>
                 <td>
                     <div class="action-buttons">
-                        <button onclick="editGalleryItem('${item.judul_kegiatan}')">Edit</button>
+                        <button class="edit" onclick="editGalleryItem('${item.judul_kegiatan}')">Edit</button>
                         <button class="delete" onclick="deleteGalleryItem('${item.judul_kegiatan}')">Delete</button>
                     </div>
                 </td>
@@ -110,88 +110,8 @@ async function addProduct() {
   window.location.href = "productform.html";
 }
 
-function openEditProductModal(product) {
-  document.getElementById("editProductFoto").value = product.foto;
-  document.getElementById("editProductNama").value = product.nama;
-  document.getElementById("editProductModal").style.display = "block";
-}
-
-function openEditGalleryModal(gallery) {
-  document.getElementById("editGalleryFoto").value = gallery.foto;
-  document.getElementById("editGalleryJudul").value = gallery.judul_kegiatan;
-  document.getElementById("editGalleryTahun").value = gallery.tahun;
-  document.getElementById("editGalleryModal").style.display = "block";
-}
-
-function closeModal(modalId) {
-  document.getElementById(modalId).style.display = "none";
-}
-
-async function submitEditProduct() {
-  const editData = {
-    foto: document.getElementById("editProductFoto").value,
-    nama: document.getElementById("editProductNama").value,
-  };
-
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${editData.nama}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editData),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data = await response.json();
-    console.log("Edit Success:", data);
-    alert("Produk berhasil diedit, mantul!");
-    closeModal("editProductModal");
-    loadProducts(); // Refresh the product list
-  } catch (error) {
-    console.error("Fetch error:", error);
-    alert("Yah, edit produk nggak berhasil.");
-  }
-}
-
-async function submitEditGalleryItem() {
-  const editData = {
-    foto: document.getElementById("editGalleryFoto").value,
-    judul_kegiatan: document.getElementById("editGalleryJudul").value,
-    tahun: document.getElementById("editGalleryTahun").value,
-  };
-
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${editData.judul_kegiatan}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editData),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data = await response.json();
-    console.log("Edit Success:", data);
-    alert("Galeri berhasil diedit, asik!");
-    closeModal("editGalleryModal");
-    loadGallery(); // Refresh the gallery list
-  } catch (error) {
-    console.error("Fetch error:", error);
-    alert("Yah, edit galeri nggak berhasil.");
-  }
+async function editProduct() {
+  window.location.href = "editproduct.html";
 }
 
 async function deleteProduct(productTitle) {

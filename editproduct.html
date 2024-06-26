@@ -10,7 +10,7 @@
     <div id="container">
       <div id="formWrapper">
         <div id="inputfile">
-          <h2>Upload Image</h2>
+          <h2>Update Image</h2>
           <div id="fileInputWrapper">
             <input type="file" id="imageInput" accept="image/*" capture />
             <button onclick="uploadImage()">Upload Image</button>
@@ -48,6 +48,8 @@
             nama: document.getElementById("nama").value,
           }; // Create JavaScript object to represent edit data
 
+          console.log("Submitting data:", editData); // Log the data being sent
+
           fetch(
             "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
             {
@@ -60,7 +62,9 @@
           )
             .then((response) => {
               if (!response.ok) {
-                throw new Error("Network response was not ok");
+                throw new Error(
+                  `Network response was not ok: ${response.status} ${response.statusText}`
+                );
               }
               return response.text(); // Use text() to get raw response
             })

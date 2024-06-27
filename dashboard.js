@@ -62,81 +62,8 @@ async function addProduct() {
   window.location.href = "productform.html";
 }
 
-async function editProduct(productName) {
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?nama=${productName}`
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const product = await response.json();
-
-    const formHTML = `
-      <div id="container">
-        <div class="formWrapper">
-          <div id="inputfile">
-            <h2>Update Image</h2>
-            <div id="fileInputWrapper">
-              <input type="file" id="imageInput" accept="image/*" capture />
-              <button type="button" onclick="uploadImage()">Upload Image</button>
-            </div>
-          </div>
-          <form id="edit-product-form">
-            <input type="hidden" id="product-id" name="product-id" value="${product._id}" />
-            <div>
-              <label for="product-name">Nama Produk</label>
-              <input type="text" id="product-name" name="product-name" value="${product.nama}" required />
-            </div>
-            <div>
-              <label for="product-photo">Foto URL</label>
-              <input type="text" id="product-photo" name="product-photo" value="${product.foto}" required />
-            </div>
-            <button type="submit">Update Product</button>
-          </form>
-        </div>
-      </div>
-    `;
-    document.getElementById("content").innerHTML = formHTML;
-  } catch (error) {
-    console.error("Error loading product for edit:", error);
-    alert("Gagal memuat produk untuk diedit. Silakan coba lagi.");
-  }
-}
-
-async function submitEditProduct(productId) {
-  const editData = {
-    _id: productId,
-    foto: document.getElementById("foto").value,
-    nama: document.getElementById("nama").value,
-  };
-
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editData),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data = await response.json();
-    console.log("Edit Success:", data);
-    alert("Produk berhasil diedit!");
-    loadProducts(); // Refresh the product list
-  } catch (error) {
-    console.error("Fetch error:", error);
-    alert("Edit produk tidak berhasil.");
-  }
+async function editProduct() {
+  window.location.href = "editproduct.html";
 }
 
 async function deleteProduct(productName) {

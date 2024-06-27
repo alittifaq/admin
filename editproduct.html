@@ -13,7 +13,7 @@
         <h2>Update Image</h2>
         <div id="fileInputWrapper">
           <input type="file" id="imageInput" accept="image/*" capture />
-          <button onclick="uploadImage()">Upload Image</button>
+          <button type="button" onclick="uploadImage()">Upload Image</button>
         </div>
       </div>
       <form id="edit-product-form">
@@ -30,18 +30,8 @@
       </form>
     </div>
   </div>
-  <script type="module" src="./index.js"></script>
-  
-  <script>
-    document.addEventListener("DOMContentLoaded", async function () {
-      const urlParams = new URLSearchParams(window.location.search);
-      const productName = urlParams.get("nama");
-
-      if (!productName) {
-        console.error("No product name found in URL");
-        return;
-      }
-
+  <script type="module">
+    async function editProduct(productName) {
       try {
         const response = await fetch(
           `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?nama=${productName}`
@@ -60,49 +50,61 @@
       } catch (error) {
         console.error("Error loading product data:", error);
       }
-    });
+    }
 
-    document
-      .getElementById("edit-product-form")
-      .addEventListener("submit", async function (event) {
-        event.preventDefault();
+    async function submitEditProduct(productId) {
+      const editData = {
+        _id: productId,
+        foto: document.getElementById("product-photo").value,
+        nama: document.getElementById("product-name").value,
+      };
 
-        const productId = document.getElementById("product-id").value;
-        const productName = document.getElementById("product-name").value;
-        const productPhoto = document.getElementById("product-photo").value;
-
-        const updateData = {
-          _id: productId,
-          nama: productName,
-          foto: productPhoto,
-        };
-
-        try {
-          const response = await fetch(
-            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(updateData),
-            }
-          );
-
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
+      try {
+        const response = await fetch(
+          `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editData),
           }
+        );
 
-          const updatedProduct = await response.json();
-          console.log("Update Success:", updatedProduct);
-          alert("Produk berhasil diperbarui!");
-          // Redirect back to the product list
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Error updating product:", error);
-          alert("Gagal memperbarui produk, coba lagi ya!");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
-      });
+
+        const data = await response.json();
+        console.log("Edit Success:", data);
+        alert("Produk berhasil diedit!");
+        window.location.href = "index.html"; // Redirect back to the product list
+      } catch (error) {
+        console.error("Fetch error:", error);
+        alert("Edit produk tidak berhasil.");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productName = urlParams.get("nama");
+
+      if (!productName) {
+        console.error("No product name found in URL");
+        return;
+      }
+
+      await editProduct(productName);
+
+      document
+        .getElementById("edit-product-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const productId = document.getElementById("product-id").value;
+          await submitEditProduct(productId);
+        });
+    });
   </script>
 </body>
 </html>

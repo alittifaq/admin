@@ -62,8 +62,8 @@ async function addProduct() {
   window.location.href = "productform.html";
 }
 
-async function editProduct() {
-  window.location.href = "editproduct.html";
+async function editProduct(productName) {
+  window.location.href = `editproduct.html?nama=${productName}`;
 }
 
 async function deleteProduct(productName) {

@@ -38,7 +38,7 @@
             <tr>
               <td><label for="tahun">Tahun:</label></td>
               <td>
-                <input type="number" id="tahun" name="tahun" value="" />
+                <input type="number" id="tahun" name="tahun" required />
               </td>
             </tr>
             <tr>
@@ -98,53 +98,6 @@
               console.error("Fetch error:", error);
               alert("Gallery gagal ditambah, cek lagi ya!");
             });
-        });
-
-      document
-        .getElementById("editButton")
-        .addEventListener("click", function () {
-          var editName = prompt("Enter the judul_kegiatan to edit:");
-
-          if (editName) {
-            var editData = {
-              foto: document.getElementById("foto").value,
-              judul_kegiatan: document.getElementById("judul_kegiatan").value,
-              tahun: parseInt(document.getElementById("tahun").value),
-              name: editName,
-            };
-
-            fetch(
-              "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
-              {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(editData),
-              }
-            )
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Network response was not ok");
-                }
-                return response.text();
-              })
-              .then((text) => {
-                try {
-                  const data = JSON.parse(text); // Try to parse JSON
-                  console.log("Edit Success:", data);
-                  alert("Gallery berhasil diedit, mantul!");
-                } catch (error) {
-                  console.error("Error parsing JSON:", error);
-                  console.log("Raw response:", text); // Log raw response for debugging
-                  alert("Yah, edit gallery nggak berhasil.");
-                }
-              })
-              .catch((error) => {
-                console.error("Fetch error:", error);
-                alert("Yah, edit gallery nggak berhasil.");
-              });
-          }
         });
     </script>
   </body>

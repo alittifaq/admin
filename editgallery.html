@@ -16,7 +16,7 @@
             <button onclick="uploadImage()">Upload Image</button>
           </div>
         </div>
-        <form id="edit-gallery-Form">
+        <form id="edit-gallery-form">
           <table>
             <tr>
               <td><input type="hidden" id="gallery-id" name="gallery-id" /></td>
@@ -64,7 +64,7 @@
       async function editGalleryItem(galleryTitle) {
         try {
           const response = await fetch(
-            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/detail?nama=${galleryTitle}`
+            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/detail?judul_kegiatan=${galleryTitle}`
           );
 
           if (!response.ok) {
@@ -73,14 +73,14 @@
 
           const galleryItem = await response.json();
 
-          // Populate form fields with product data
-          document.getElementById("gallery-id").value = gallery._id;
+          // Populate form fields with gallery data
+          document.getElementById("gallery-id").value = galleryItem._id;
           document.getElementById("judul_kegiatan").value =
-            gallery.judul_kegiatan;
-          document.getElementById("gallery-photo").value = gallery.foto;
-          document.getElementById("tahun").value = gallery.tahun;
+            galleryItem.judul_kegiatan;
+          document.getElementById("gallery-photo").value = galleryItem.foto;
+          document.getElementById("tahun").value = galleryItem.tahun;
         } catch (error) {
-          console.error("Error loading product data:", error);
+          console.error("Error loading gallery data:", error);
         }
       }
 

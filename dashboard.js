@@ -64,42 +64,18 @@ async function addProduct() {
   window.location.href = "productform.html";
 }
 
-async function editProduct(productName) {
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?nama=${productName}`
-    );
-
-    // Check if the response is ok
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const product = await response.json();
-
-    // Populate form fields with product data
-    document.getElementById("product-id").value = product._id;
-    document.getElementById("product-name").value = product.nama;
-    document.getElementById("product-photo").value = product.foto;
-
-    // If you want to navigate to a new page, you can use:
-    window.location.href = `editproduct.html?id=${product._id}`;
-    
-  } catch (error) {
-    console.error("Error loading product data:", error);
-    const text = await response.text();
-    console.error("Response text:", text);
-  }
+async function editProduct() {
+  window.location.href = "editproduct.html";
 }
 
-async function deleteProduct(productId) {
+async function deleteProduct(productTitle) {
   try {
     const deleteData = {
-      _id: productId, // Use productId directly
+      nama: productTitle.toString(), // Convert productTitle to string
     };
 
     const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
+      "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
       {
         method: "DELETE",
         headers: {
@@ -119,7 +95,7 @@ async function deleteProduct(productId) {
       console.log("Delete Success:", data);
       alert("Produk berhasil dihapus, beres!");
       // Refresh the product list
-      loadProducts(); // Call loadProducts to refresh the list
+      loadProducts(); // Call loadProduct to refresh the list
     } catch (error) {
       console.error("Error parsing JSON:", error);
       console.log("Raw response:", text);

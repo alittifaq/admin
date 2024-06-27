@@ -1,129 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Edit Gallery</title>
-  <link rel="stylesheet" href="galleryform.css" />
-</head>
-<body>
-  <div id="container">
-    <div class="formWrapper">
-      <div id="inputfile">
-        <h2>Update Image</h2>
-        <div id="fileInputWrapper">
-          <input type="file" id="imageInput" accept="image/*" capture />
-          <button type="button" onclick="uploadImage()">Upload Image</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Gallery</title>
+    <link rel="stylesheet" href="galleryform.css" />
+  </head>
+  <body>
+    <div id="container">
+      <div class="formWrapper">
+        <div id="inputfile">
+          <h2>Update Image</h2>
+          <div id="fileInputWrapper">
+            <input type="file" id="imageInput" accept="image/*" capture />
+            <button type="button" onclick="uploadImage()">Upload Image</button>
+          </div>
         </div>
+        <form id="edit-gallery-form">
+          <table>
+            <tr>
+              <td><input type="hidden" id="gallery-id" name="gallery-id" /></td>
+            </tr>
+            <tr>
+              <td><label for="gallery-photo">Foto:</label></td>
+              <td>
+                <input
+                  type="text"
+                  id="gallery-photo"
+                  name="gallery-photo"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><label for="gallery-title">Judul Kegiatan:</label></td>
+              <td>
+                <input
+                  type="text"
+                  id="gallery-title"
+                  name="gallery-title"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td><label for="gallery-year">Tahun:</label></td>
+              <td>
+                <input
+                  type="number"
+                  id="gallery-year"
+                  name="gallery-year"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="center">
+                <button type="submit">Update Gallery</button>
+              </td>
+            </tr>
+          </table>
+        </form>
       </div>
-      <form id="edit-gallery-form">
-        <table>
-          <tr>
-            <td><input type="hidden" id="gallery-id" name="gallery-id" /></td>
-          </tr>
-          <tr>
-            <td><label for="gallery-photo">Foto:</label></td>
-            <td><input type="text" id="gallery-photo" name="gallery-photo" required /></td>
-          </tr>
-          <tr>
-            <td><label for="gallery-title">Judul Kegiatan:</label></td>
-            <td><input type="text" id="gallery-title" name="gallery-title" required /></td>
-          </tr>
-          <tr>
-            <td><label for="gallery-year">Tahun:</label></td>
-            <td><input type="number" id="gallery-year" name="gallery-year" required /></td>
-          </tr>
-          <tr>
-            <td colspan="2" class="center">
-              <button type="submit">Update Gallery</button>
-            </td>
-          </tr>
-        </table>
-      </form>
     </div>
-  </div>
-  <div id="content"></div>
-  <script type="module" src="./index.js"></script>
-  <script type="module">
-    async function editGallery(judulKegiatan) {
-      try {
-        const response = await fetch(
-          `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/detail?judul_kegiatan=${judulKegiatan}`
-        );
+    <div id="content"></div>
+    <script type="module" src="./index.js"></script>
+    <script type="module">
+      async function editGallery(galleryTitle) {
+        try {
+          const response = await fetch(
+            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/detail?judul_kegiatan=${galleryTitle}`
+          );
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const gallery = await response.json();
-
-        // Populate form fields with gallery data
-        document.getElementById("gallery-id").value = gallery._id;
-        document.getElementById("gallery-title").value = gallery.judul_kegiatan;
-        document.getElementById("gallery-photo").value = gallery.foto;
-        document.getElementById("gallery-year").value = gallery.tahun;
-      } catch (error) {
-        console.error("Error loading gallery data:", error);
-      }
-    }
-
-    async function submitEditGallery(galleryId) {
-      const editData = {
-        _id: galleryId,
-        foto: document.getElementById("gallery-photo").value,
-        judul_kegiatan: document.getElementById("gallery-title").value,
-        tahun: parseInt(document.getElementById("gallery-year").value),
-      };
-
-      try {
-        const response = await fetch(
-          `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(editData),
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
-        );
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+          const gallery = await response.json();
+
+          // Populate form fields with gallery data
+          document.getElementById("gallery-id").value = gallery._id;
+          document.getElementById("gallery-title").value =
+            gallery.judul_kegiatan;
+          document.getElementById("gallery-photo").value = gallery.foto;
+          document.getElementById("gallery-year").value = gallery.tahun;
+        } catch (error) {
+          console.error("Error loading gallery data:", error);
+        }
+      }
+
+      async function submitEditGallery(galleryId) {
+        const editData = {
+          _id: galleryId,
+          foto: document.getElementById("gallery-photo").value,
+          judul_kegiatan: document.getElementById("gallery-title").value,
+          tahun: parseInt(document.getElementById("gallery-year").value),
+        };
+
+        try {
+          const response = await fetch(
+            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery`,
+            {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(editData),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+          console.log("Edit Success:", data);
+          alert("Galeri berhasil diedit!");
+          window.location.href = "index.html"; // Redirect back to the gallery list
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("Edit galeri tidak berhasil.");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const galleryTitle = urlParams.get("judul_kegiatan");
+
+        console.log("Judul Kegiatan:", galleryTitle);
+
+        if (!galleryTitle) {
+          console.error("No gallery title found in URL");
+          return;
         }
 
-        const data = await response.json();
-        console.log("Edit Success:", data);
-        alert("Galeri berhasil diedit!");
-        window.location.href = "index.html"; // Redirect back to the gallery list
-      } catch (error) {
-        console.error("Fetch error:", error);
-        alert("Edit galeri tidak berhasil.");
-      }
-    }
+        await editGallery(galleryTitle);
 
-    document.addEventListener("DOMContentLoaded", async function () {
-      const urlParams = new URLSearchParams(window.location.search);
-      const judulKegiatan = urlParams.get("judul_kegiatan");
+        document
+          .getElementById("edit-gallery-form")
+          .addEventListener("submit", async function (event) {
+            event.preventDefault();
 
-      console.log("Judul Kegiatan:", judulKegiatan); // Tambahkan log ini
-
-
-      if (!judulKegiatan) {
-        console.error("No gallery title found in URL");
-        return;
-      }
-
-      await editGallery(judulKegiatan);
-
-      document
-        .getElementById("edit-gallery-form")
-        .addEventListener("submit", async function (event) {
-          event.preventDefault();
-
-          const galleryId = document.getElementById("gallery-id").value;
-          await submitEditGallery(galleryId);
-        });
-    });
-  </script>
-</body>
+            const galleryId = document.getElementById("gallery-id").value;
+            await submitEditGallery(galleryId);
+          });
+      });
+    </script>
+  </body>
 </html>

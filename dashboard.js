@@ -159,7 +159,7 @@ async function addGalleryItem() {
 }
 
 async function editGalleryItem(galleryTitle) {
-  window.location.href = `editgallery.html?nama=${galleryTitle}`;
+  window.location.href = `editgallery.html?judul_kegiatan=${galleryTitle}`;
 }
 
 async function deleteGalleryItem(galleryTitle) {

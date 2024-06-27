@@ -46,7 +46,7 @@ async function loadProducts() {
                 <td>${product.nama}</td>
                 <td>
                     <div class="action-buttons">
-                        <button onclick="editProduct('${product._id}')">Edit</button>
+                        <button onclick="editProduct('${product.nama}')">Edit</button>
                         <button class="delete" onclick="deleteProduct('${product._id}')">Delete</button>
                     </div>
                 </td>
@@ -55,6 +55,8 @@ async function loadProducts() {
     });
   } catch (error) {
     console.error("Error loading products:", error);
+    const text = await response.text();
+    console.error("Response text:", text);
   }
 }
 
@@ -62,11 +64,17 @@ async function addProduct() {
   window.location.href = "productform.html";
 }
 
-async function editProduct(productId) {
+async function editProduct(productName) {
   try {
     const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productId}`
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?nama=${productName}`
     );
+
+    // Check if the response is ok
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
     const product = await response.json();
 
     // Populate form fields with product data
@@ -74,8 +82,13 @@ async function editProduct(productId) {
     document.getElementById("product-name").value = product.nama;
     document.getElementById("product-photo").value = product.foto;
 
+    // If you want to navigate to a new page, you can use:
+    window.location.href = `editproduct.html?id=${product._id}`;
+    
   } catch (error) {
     console.error("Error loading product data:", error);
+    const text = await response.text();
+    console.error("Response text:", text);
   }
 }
 

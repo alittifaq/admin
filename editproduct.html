@@ -17,16 +17,24 @@
         </div>
       </div>
       <form id="edit-product-form">
-        <input type="hidden" id="product-id" name="product-id" />
-        <div>
-          <label for="product-name">Nama Produk</label>
-          <input type="text" id="product-name" name="product-name" required />
-        </div>
-        <div>
-          <label for="product-photo">Foto URL</label>
-          <input type="text" id="product-photo" name="product-photo" required />
-        </div>
-        <button type="submit">Update Product</button>
+        <table>
+          <tr>
+            <td> <input type="hidden" id="product-id" name="product-id" /></td>
+          </tr>
+          <tr>
+            <td><label for="product-photo">Foto:</label></td>
+            <td> <input type="text" id="product-photo" name="product-photo" required /></td>
+          </tr>
+          <tr>
+            <td><label for="product-name">Nama:</label></td>
+            <td><input type="text" id="product-name" name="product-name" required /></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="center">
+              <button type="submit">Update Product</button>
+            </td>
+          </tr>
+        </table>
       </form>
     </div>
   </div>

@@ -46,7 +46,7 @@ async function loadProducts() {
                 <td>${product.nama}</td>
                 <td>
                     <div class="action-buttons">
-                        <button onclick="editProduct('${product.nama}')">Edit</button>
+                        <button class="edit" onclick="editProduct('${product.nama}')">Edit</button>
                         <button class="delete" onclick="deleteProduct('${product._id}')">Delete</button>
                     </div>
                 </td>
@@ -55,8 +55,6 @@ async function loadProducts() {
     });
   } catch (error) {
     console.error("Error loading products:", error);
-    const text = await response.text();
-    console.error("Response text:", text);
   }
 }
 
@@ -64,18 +62,73 @@ async function addProduct() {
   window.location.href = "productform.html";
 }
 
-async function editProduct() {
-  window.location.href = "editproduct.html";
+async function editProduct(productName) {
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/detail?nama=${productName}`
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const product = await response.json();
+
+    const formHTML = `
+      <div id="edit-product-form">
+        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto" value="${product.foto}">
+        <label>Nama Produk:</label><input type="text" id="nama" placeholder="Nama Produk" value="${product.nama}">
+        <button onclick="submitEditProduct('${product._id}')">Submit</button>
+      </div>
+    `;
+    document.getElementById("content").innerHTML = formHTML;
+  } catch (error) {
+    console.error("Error loading product for edit:", error);
+    alert("Gagal memuat produk untuk diedit. Silakan coba lagi.");
+  }
 }
 
-async function deleteProduct(productTitle) {
+async function submitEditProduct(productId) {
+  const editData = {
+    _id: productId,
+    foto: document.getElementById("foto").value,
+    nama: document.getElementById("nama").value
+  };
+
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    console.log("Edit Success:", data);
+    alert("Produk berhasil diedit!");
+    loadProducts(); // Refresh the product list
+  } catch (error) {
+    console.error("Fetch error:", error);
+    alert("Edit produk tidak berhasil.");
+  }
+}
+
+async function deleteProduct(productId) {
   try {
     const deleteData = {
-      nama: productTitle.toString(), // Convert productTitle to string
+      _id: productId, // Use productId directly
     };
 
     const response = await fetch(
-      "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
       {
         method: "DELETE",
         headers: {
@@ -95,7 +148,7 @@ async function deleteProduct(productTitle) {
       console.log("Delete Success:", data);
       alert("Produk berhasil dihapus, beres!");
       // Refresh the product list
-      loadProducts(); // Call loadProduct to refresh the list
+      loadProducts(); // Call loadProducts to refresh the list
     } catch (error) {
       console.error("Error parsing JSON:", error);
       console.log("Raw response:", text);

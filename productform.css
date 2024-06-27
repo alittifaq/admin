@@ -21,7 +21,7 @@ body {
   background-color: #fff;
 }
 
-#formWrapper {
+.formWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;

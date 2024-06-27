@@ -10,7 +10,6 @@ function logout() {
   window.location.href = "https://www.blkkalittifaq.id/dashboard/login.html";
 }
 
-
 //product
 async function loadProducts() {
   const content = document.getElementById("content");
@@ -64,7 +63,20 @@ async function addProduct() {
 }
 
 async function editProduct(productId) {
-  window.location.href = `editproduct.html?id=${productId}`;
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productId}`
+    );
+    const product = await response.json();
+
+    // Populate form fields with product data
+    document.getElementById("product-id").value = product._id;
+    document.getElementById("product-name").value = product.nama;
+    document.getElementById("product-photo").value = product.foto;
+
+  } catch (error) {
+    console.error("Error loading product data:", error);
+  }
 }
 
 async function deleteProduct(productId) {

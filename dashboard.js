@@ -159,17 +159,10 @@ async function submitEditProduct(productId) {
       throw new Error("Network response was not ok");
     }
 
-    const text = await response.text();
-    try {
-      const data = JSON.parse(text);
-      console.log("Edit Success:", data);
-      alert("Produk berhasil diedit!");
-      loadProducts(); // Refresh the product list
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-      console.log("Raw response:", text);
-      alert("Edit produk tidak berhasil.");
-    }
+    const data = await response.json();
+    console.log("Edit Success:", data);
+    alert("Produk berhasil diedit!");
+    loadProducts(); // Refresh the product list
   } catch (error) {
     console.error("Fetch error:", error);
     alert("Edit produk tidak berhasil.");
@@ -270,17 +263,10 @@ async function submitEditGalleryItem(galleryItemId) {
       throw new Error("Network response was not ok");
     }
 
-    const text = await response.text();
-    try {
-      const data = JSON.parse(text);
-      console.log("Edit Success:", data);
-      alert("Item galeri berhasil diedit!");
-      loadGallery(); // Refresh the gallery list
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-      console.log("Raw response:", text);
-      alert("Edit item galeri tidak berhasil.");
-    }
+    const data = await response.json();
+    console.log("Edit Success:", data);
+    alert("Item galeri berhasil diedit!");
+    loadGallery(); // Refresh the gallery list
   } catch (error) {
     console.error("Fetch error:", error);
     alert("Edit item galeri tidak berhasil.");

@@ -8,7 +8,7 @@
   </head>
   <body>
     <div id="container">
-      <div id="edit-product-form" class="formWrapper">
+      <div class="formWrapper">
         <div id="inputfile">
           <h2>Update Image</h2>
           <div id="fileInputWrapper">
@@ -16,73 +16,87 @@
             <button onclick="uploadImage()">Upload Image</button>
           </div>
         </div>
-        <form id="productForm">
-          <table>
-            <tr>
-              <td><label for="foto">Foto:</label></td>
-              <td><input type="text" id="foto" name="foto" value="" /></td>
-            </tr>
-            <tr>
-              <td><label for="nama">Nama:</label></td>
-              <td><input type="text" id="nama" name="nama" value="" /></td>
-            </tr>
-            <tr>
-              <td colspan="2" class="center">
-                <input type="submit" value="Submit" />
-              </td>
-            </tr>
-          </table>
-        </form>
+        <form id="edit-product-form">
+          <input type="hidden" id="product-id" name="product-id">
+          <div>
+              <label for="product-name">Nama Produk</label>
+              <input type="text" id="product-name" name="product-name" required>
+          </div>
+          <div>
+              <label for="product-photo">Foto URL</label>
+              <input type="text" id="product-photo" name="product-photo" required>
+          </div>
+          <button type="submit">Update Product</button>
+      </form>
       </div>
     </div>
     <script type="module" src="./index.js"></script>
 
     <script>
+      document.addEventListener("DOMContentLoaded", async function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get("id");
+
+        if (!productId) {
+          console.error("No product ID found in URL");
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product/${productId}`
+          );
+          const product = await response.json();
+
+          // Populate form fields with product data
+          document.getElementById("product-id").value = product._id;
+          document.getElementById("product-name").value = product.nama;
+          document.getElementById("product-photo").value = product.foto;
+        } catch (error) {
+          console.error("Error loading product data:", error);
+        }
+      });
+
       document
-        .getElementById("productForm")
-        .addEventListener("submit", function (event) {
-          event.preventDefault(); // Prevent the form from submitting normally
+        .getElementById("edit-product-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
 
-          var editData = {
-            foto: document.getElementById("foto").value,
-            nama: document.getElementById("nama").value,
-          }; // Create JavaScript object to represent edit data
+          const productId = document.getElementById("product-id").value;
+          const productName = document.getElementById("product-name").value;
+          const productPhoto = document.getElementById("product-photo").value;
 
-          console.log("Submitting data:", editData); // Log the data being sent
+          const updateData = {
+            _id: productId,
+            nama: productName,
+            foto: productPhoto,
+          };
 
-          fetch(
-            "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product",
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(editData), // Convert JavaScript object to JSON string
+          try {
+            const response = await fetch(
+              `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updateData),
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
             }
-          )
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error(
-                  `Network response was not ok: ${response.status} ${response.statusText}`
-                );
-              }
-              return response.text(); // Use text() to get raw response
-            })
-            .then((text) => {
-              try {
-                const data = JSON.parse(text); // Try to parse JSON
-                console.log("Edit Success:", data);
-                alert("Produk berhasil diedit, mantul!");
-              } catch (error) {
-                console.error("Error parsing JSON:", error);
-                console.log("Raw response:", text); // Log raw response for debugging
-                alert("Yah, edit produk nggak berhasil.");
-              }
-            })
-            .catch((error) => {
-              console.error("Fetch error:", error);
-              alert("Yah, edit produk nggak berhasil.");
-            });
+
+            const updatedProduct = await response.json();
+            console.log("Update Success:", updatedProduct);
+            alert("Produk berhasil diperbarui!");
+            // Redirect back to the product list
+            window.location.href = "index.html";
+          } catch (error) {
+            console.error("Error updating product:", error);
+            alert("Gagal memperbarui produk, coba lagi ya!");
+          }
         });
     </script>
   </body>

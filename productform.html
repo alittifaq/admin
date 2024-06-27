@@ -81,52 +81,6 @@
               alert("Produk gagal ditambah, cek lagi ya!");
             });
         });
-
-      document
-        .getElementById("editButton")
-        .addEventListener("click", function () {
-          var editName = prompt("Enter the Product Name to edit:");
-
-          if (editName) {
-            var editData = {
-              foto: document.getElementById("foto").value,
-              nama: document.getElementById("nama").value,
-              name: editName,
-            };
-
-            fetch(
-              `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
-              {
-                method: "PUT",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(editData), // Convert JavaScript object to JSON string
-              }
-            )
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Network response was not ok");
-                }
-                return response.text(); // Use text() to get raw response
-              })
-              .then((text) => {
-                try {
-                  const data = JSON.parse(text); // Try to parse JSON
-                  console.log("Edit Success:", data);
-                  alert("Produk berhasil diedit, mantul!");
-                } catch (error) {
-                  console.error("Error parsing JSON:", error);
-                  console.log("Raw response:", text); // Log raw response for debugging
-                  alert("Yah, edit produk nggak berhasil.");
-                }
-              })
-              .catch((error) => {
-                console.error("Fetch error:", error);
-                alert("Yah, edit produk nggak berhasil.");
-              });
-          }
-        });
     </script>
   </body>
 </html>

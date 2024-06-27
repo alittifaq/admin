@@ -121,10 +121,10 @@ async function submitEditProduct(productId) {
   }
 }
 
-async function deleteProduct(productId) {
+async function deleteProduct(productName) {
   try {
     const deleteData = {
-      _id: productId, // Use productId directly
+      nama: productName, // Use productName directly
     };
 
     const response = await fetch(

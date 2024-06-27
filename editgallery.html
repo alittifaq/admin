@@ -105,6 +105,9 @@
       const urlParams = new URLSearchParams(window.location.search);
       const judulKegiatan = urlParams.get("judul_kegiatan");
 
+      console.log("Judul Kegiatan:", judulKegiatan); // Tambahkan log ini
+
+
       if (!judulKegiatan) {
         console.error("No gallery title found in URL");
         return;

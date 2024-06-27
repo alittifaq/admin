@@ -131,9 +131,6 @@ async function deleteProduct(productId) {
   }
 }
 
-// Call the function to load products on page load
-loadProducts();
-
 //gallery
 async function loadGallery() {
   const content = document.getElementById("content");

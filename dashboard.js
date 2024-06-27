@@ -159,64 +159,7 @@ async function addGalleryItem() {
 }
 
 async function editGalleryItem(galleryTitle) {
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/detail?judul_kegiatan=${galleryTitle}`
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const galleryItem = await response.json();
-
-    const formHTML = `
-      <div id="edit-gallery-form">
-        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto" value="${galleryItem.foto}">
-        <label>Judul Kegiatan:</label><input type="text" id="judul_kegiatan" placeholder="Judul Kegiatan" value="${galleryItem.judul_kegiatan}">
-        <label>Tahun:</label><input type="text" id="tahun" placeholder="Tahun" value="${galleryItem.tahun}">
-        <button onclick="submitEditGalleryItem('${galleryItem._id}')">Submit</button>
-      </div>
-    `;
-    document.getElementById("content").innerHTML = formHTML;
-  } catch (error) {
-    console.error("Error loading gallery item for edit:", error);
-    alert("Gagal memuat item galeri untuk diedit. Silakan coba lagi.");
-  }
-}
-
-async function submitEditGalleryItem(galleryItemId) {
-  const editData = {
-    id: galleryItemId,
-    foto: document.getElementById("foto").value,
-    judul_kegiatan: document.getElementById("judul_kegiatan").value,
-    tahun: document.getElementById("tahun").value,
-  };
-
-  try {
-    const response = await fetch(
-      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editData),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-
-    const data = await response.json();
-    console.log("Edit Success:", data);
-    alert("Item galeri berhasil diedit!");
-    loadGallery(); // Refresh the gallery list
-  } catch (error) {
-    console.error("Fetch error:", error);
-    alert("Edit item galeri tidak berhasil.");
-  }
+  window.location.href = `editgallery.html?nama=${galleryTitle}`;
 }
 
 async function deleteGalleryItem(galleryTitle) {

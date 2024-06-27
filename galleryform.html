@@ -45,8 +45,6 @@
               <td colspan="2" class="center">
                 <div class="buttonGroup">
                   <input type="submit" value="Submit" />
-                  <button type="button" id="editButton">Edit</button>
-                  <button type="button" id="deleteButton">Delete</button>
                 </div>
               </td>
             </tr>
@@ -145,50 +143,6 @@
               .catch((error) => {
                 console.error("Fetch error:", error);
                 alert("Yah, edit gallery nggak berhasil.");
-              });
-          }
-        });
-
-      document
-        .getElementById("deleteButton")
-        .addEventListener("click", function () {
-          var deleteName = prompt("Enter the judul_kegiatan to delete:");
-
-          if (deleteName) {
-            var deleteData = {
-              judul_kegiatan: deleteName,
-            };
-
-            fetch(
-              "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery",
-              {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(deleteData),
-              }
-            )
-              .then((response) => {
-                if (!response.ok) {
-                  throw new Error("Network response was not ok");
-                }
-                return response.text(); // Use text() to get raw response
-              })
-              .then((text) => {
-                try {
-                  const data = JSON.parse(text); // Try to parse JSON
-                  console.log("Delete Success:", data);
-                  alert("Gallery sudah dihapus, sip!");
-                } catch (error) {
-                  console.error("Error parsing JSON:", error);
-                  console.log("Raw response:", text); // Log raw response for debugging
-                  alert("Gagal hapus gallery, coba lagi ya!");
-                }
-              })
-              .catch((error) => {
-                console.error("Fetch error:", error);
-                alert("Gagal hapus gallery, coba lagi ya!");
               });
           }
         });

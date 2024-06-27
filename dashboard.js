@@ -75,13 +75,38 @@ async function editProduct(productName) {
     const product = await response.json();
 
     const formHTML = `
-      <div id="edit-product-form">
-        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto" value="${product.foto}">
-        <label>Nama Produk:</label><input type="text" id="nama" placeholder="Nama Produk" value="${product.nama}">
-        <button onclick="submitEditProduct('${product._id}')">Submit</button>
+      <div id="container">
+        <div class="formWrapper">
+          <div id="inputfile">
+            <h2>Update Image</h2>
+            <div id="fileInputWrapper">
+              <input type="file" id="imageInput" accept="image/*" capture />
+              <button onclick="uploadImage()">Upload Image</button>
+            </div>
+          </div>
+          <form id="edit-product-form">
+            <input type="hidden" id="product-id" name="product-id" value="${product._id}" />
+            <div>
+              <label for="product-name">Nama Produk</label>
+              <input type="text" id="product-name" name="product-name" value="${product.nama}" required />
+            </div>
+            <div>
+              <label for="product-photo">Foto URL</label>
+              <input type="text" id="product-photo" name="product-photo" value="${product.foto}" required />
+            </div>
+            <button type="submit">Update Product</button>
+          </form>
+        </div>
       </div>
     `;
     document.getElementById("content").innerHTML = formHTML;
+
+    document
+      .getElementById("edit-product-form")
+      .addEventListener("submit", async function (event) {
+        event.preventDefault();
+        await submitEditProduct(product._id);
+      });
   } catch (error) {
     console.error("Error loading product for edit:", error);
     alert("Gagal memuat produk untuk diedit. Silakan coba lagi.");
@@ -91,8 +116,8 @@ async function editProduct(productName) {
 async function submitEditProduct(productId) {
   const editData = {
     _id: productId,
-    foto: document.getElementById("foto").value,
-    nama: document.getElementById("nama").value,
+    foto: document.getElementById("product-photo").value,
+    nama: document.getElementById("product-name").value,
   };
 
   try {

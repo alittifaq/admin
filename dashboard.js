@@ -47,7 +47,7 @@ async function loadProducts() {
                 <td>
                     <div class="action-buttons">
                         <button class="edit" onclick="editProduct('${product.nama}')">Edit</button>
-                        <button class="delete" onclick="deleteProduct('${product._id}')">Delete</button>
+                        <button class="delete" onclick="deleteProduct('${product.nama}')">Delete</button>
                     </div>
                 </td>
             `;
@@ -92,7 +92,7 @@ async function submitEditProduct(productId) {
   const editData = {
     _id: productId,
     foto: document.getElementById("foto").value,
-    nama: document.getElementById("nama").value
+    nama: document.getElementById("nama").value,
   };
 
   try {
@@ -124,7 +124,7 @@ async function submitEditProduct(productId) {
 async function deleteProduct(productName) {
   try {
     const deleteData = {
-      nama: productName, // Use productName directly
+      nama: productName.toString(), // Convert productName to string
     };
 
     const response = await fetch(
@@ -159,7 +159,6 @@ async function deleteProduct(productName) {
     alert("Gagal hapus produk, coba lagi ya!");
   }
 }
-
 //gallery
 async function loadGallery() {
   const content = document.getElementById("content");

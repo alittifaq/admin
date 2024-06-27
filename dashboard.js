@@ -157,6 +157,81 @@ async function addGalleryItem() {
   window.location.href = "galleryform.html";
 }
 
+async function editGalleryItem(galleryTitle) {
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const text = await response.text();
+
+    // Handle case where response is empty
+    if (!text.trim()) {
+      throw new Error("Empty response from server");
+    }
+
+    const galleryItem = JSON.parse(text);
+
+    // Tampilkan form edit untuk mengisi data baru
+    const formHTML = `
+      <div id="edit-gallery-form">
+        <label>Foto:</label><input type="text" id="foto" placeholder="URL Foto" value="${galleryItem.foto}">
+        <label>Judul Kegiatan:</label><input type="text" id="judul_kegiatan" placeholder="Judul Kegiatan" value="${galleryItem.judul_kegiatan}">
+        <label>Tahun:</label><input type="text" id="tahun" placeholder="Tahun" value="${galleryItem.tahun}">
+        <button onclick="submitEditGalleryItem('${galleryTitle}')">Submit</button>
+      </div>
+    `;
+    document.getElementById("content").innerHTML = formHTML;
+  } catch (error) {
+    console.error("Error loading gallery item for edit:", error);
+    alert("Gagal memuat galeri untuk diedit. Silakan coba lagi.");
+  }
+}
+
+async function submitEditGalleryItem(galleryTitle) {
+  var editData = {
+    foto: document.getElementById("foto").value,
+    judul_kegiatan: document.getElementById("judul_kegiatan").value,
+    tahun: document.getElementById("tahun").value,
+  };
+
+  try {
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery/${galleryTitle}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const text = await response.text();
+    try {
+      const data = JSON.parse(text);
+      console.log("Edit Success:", data);
+      alert("Galeri berhasil diedit, asik!");
+      loadGallery(); // Refresh the gallery list
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      console.log("Raw response:", text);
+      alert("Yah, edit galeri nggak berhasil.");
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
+    alert("Yah, edit galeri nggak berhasil.");
+  }
+}
+
 async function deleteGalleryItem(galleryTitle) {
   try {
     const deleteData = {

@@ -206,3 +206,155 @@ async function deleteGalleryItem(galleryTitle) {
     alert("Gagal hapus galeri, coba lagi ya!");
   }
 }
+
+// Function to fetch and display feedbacks
+async function fetchFeedbacks() {
+  try {
+    const response = await fetch("https://www.blkkalittifaq.id/api/feedbacks");
+    if (!response.ok) {
+      throw new Error("Failed to fetch feedbacks");
+    }
+    const feedbacks = await response.json();
+    displayFeedbacks(feedbacks);
+  } catch (error) {
+    console.error("Error fetching feedbacks:", error);
+  }
+}
+
+// Function to display feedbacks on the dashboard
+function displayFeedbacks(feedbacks) {
+  const content = document.getElementById("content");
+  content.innerHTML = ""; // Clear previous content
+
+  const feedbackList = document.createElement("ul");
+  feedbackList.classList.add("feedback-list");
+
+  feedbacks.forEach((feedback, index) => {
+    const feedbackItem = document.createElement("li");
+    feedbackItem.classList.add("feedback-item");
+    feedbackItem.dataset.index = index;
+
+    const stars = getStarRating(feedback.rating);
+    feedbackItem.innerHTML = `
+      <div class="feedback-rating">${stars}</div>
+      <p>${feedback.content}</p>
+      <button class="btn btn-sm btn-danger delete-btn">Delete</button>
+      <button class="btn btn-sm btn-primary edit-btn">Edit</button>
+    `;
+
+    // Event listener for delete button
+    const deleteButton = feedbackItem.querySelector(".delete-btn");
+    deleteButton.addEventListener("click", () => {
+      deleteFeedback(feedback._id); // Assuming feedback has unique identifier _id
+    });
+
+    // Event listener for edit button
+    const editButton = feedbackItem.querySelector(".edit-btn");
+    editButton.addEventListener("click", () => {
+      showEditForm(feedback);
+    });
+
+    feedbackList.appendChild(feedbackItem);
+  });
+
+  content.appendChild(feedbackList);
+}
+
+// Function to delete a feedback
+async function deleteFeedback(feedbackId) {
+  try {
+    const response = await fetch(
+      `https://www.blkkalittifaq.id/api/feedbacks/${feedbackId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to delete feedback");
+    }
+    fetchFeedbacks(); // Refresh feedback list after deletion
+  } catch (error) {
+    console.error("Error deleting feedback:", error);
+  }
+}
+
+// Function to display edit form for feedback
+function showEditForm(feedback) {
+  const content = document.getElementById("content");
+  content.innerHTML = ""; // Clear previous content
+
+  const editForm = document.createElement("form");
+  editForm.classList.add("edit-form");
+  editForm.innerHTML = `
+    <div class="star-rating">
+      <label for="editRating">Rating:</label>
+      <input type="number" id="editRating" name="editRating" min="1" max="5" value="${feedback.rating}" required>
+    </div>
+    <div>
+      <label for="editContent">Content:</label>
+      <textarea id="editContent" name="editContent" rows="4" required>${feedback.content}</textarea>
+    </div>
+    <button type="submit" class="btn btn-sm btn-success save-btn">Save</button>
+    <button type="button" class="btn btn-sm btn-secondary cancel-btn">Cancel</button>
+  `;
+
+  // Event listener for save button
+  editForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const editedFeedback = {
+      rating: parseInt(document.getElementById("editRating").value),
+      content: document.getElementById("editContent").value,
+    };
+    saveEditedFeedback(feedback._id, editedFeedback); // Assuming feedback has unique identifier _id
+  });
+
+  // Event listener for cancel button
+  const cancelButton = editForm.querySelector(".cancel-btn");
+  cancelButton.addEventListener("click", () => {
+    fetchFeedbacks(); // Reload feedbacks on cancel
+  });
+
+  content.appendChild(editForm);
+}
+
+// Function to save edited feedback
+async function saveEditedFeedback(feedbackId, editedFeedback) {
+  try {
+    const response = await fetch(
+      `https://www.blkkalittifaq.id/api/feedbacks/${feedbackId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editedFeedback),
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Failed to save edited feedback");
+    }
+    fetchFeedbacks(); // Refresh feedback list after saving
+  } catch (error) {
+    console.error("Error saving edited feedback:", error);
+  }
+}
+
+// Function to logout (placeholder)
+function logout() {
+  console.log("Logout clicked");
+  // Implement logout functionality as needed
+}
+
+// Function to get star rating symbols
+function getStarRating(rating) {
+  let stars = "";
+  for (let i = 1; i <= 5; i++) {
+    stars += i <= rating ? "★" : "☆";
+  }
+  return stars;
+}
+
+// Load initial feedbacks on page load
+document.addEventListener("DOMContentLoaded", () => {
+  fetchFeedbacks();
+});

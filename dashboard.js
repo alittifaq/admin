@@ -68,40 +68,46 @@ async function editProduct(productName) {
 
 async function deleteProduct(productName) {
   try {
+    // Mengubah nama produk menjadi string dan menyimpannya di objek deleteData
     const deleteData = {
       nama: productName.toString(), // Convert productName to string
     };
 
+    // Mengirim permintaan DELETE ke server
     const response = await fetch(
       `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/product`,
       {
-        method: "DELETE",
+        method: "DELETE", // Metode HTTP yang digunakan adalah DELETE
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // Menentukan tipe konten yang dikirim adalah JSON
         },
-        body: JSON.stringify(deleteData),
+        body: JSON.stringify(deleteData), // Mengubah objek deleteData menjadi string JSON dan mengirimkannya sebagai body permintaan
       }
     );
 
+    // Mengecek apakah respons dari server tidak OK
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error("Network response was not ok"); // Melempar error jika respons dari server tidak OK
     }
 
+    // Menunggu dan mengambil teks dari respons
     const text = await response.text();
     try {
       const data = JSON.parse(text);
-      console.log("Delete Success:", data);
-      alert("Produk berhasil dihapus, beres!");
-      // Refresh the product list
-      loadProducts(); // Call loadProducts to refresh the list
+      console.log("Delete Success:", data); // Menampilkan pesan sukses di konsol
+      alert("Produk berhasil dihapus, beres!"); // Menampilkan alert bahwa produk berhasil dihapus
+      // Memanggil fungsi loadProducts untuk menyegarkan daftar produk
+      loadProducts();
     } catch (error) {
+      // Jika gagal mengubah teks menjadi JSON
       console.error("Error parsing JSON:", error);
       console.log("Raw response:", text);
-      alert("Gagal hapus produk, coba lagi ya!");
+      alert("Gagal hapus produk, coba lagi ya!"); //Menampilkan alert bahwa penghapusan produk gagal
     }
   } catch (error) {
+    // Menangani kesalahan selama proses fetch
     console.error("Fetch error:", error);
-    alert("Gagal hapus produk, coba lagi ya!");
+    alert("Gagal hapus produk, coba lagi ya!"); // Menampilkan alert bahwa penghapusan produk gagal
   }
 }
 //gallery

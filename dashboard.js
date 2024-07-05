@@ -237,16 +237,20 @@ async function loadFeedback() {
       "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/feedback"
     );
     const feedbacks = await response.json();
+    console.log("Feedback data:", feedbacks); // Logging data feedback untuk melihat strukturnya
+
     const feedbackTableBody = document.getElementById("feedback-table-body");
     feedbackTableBody.innerHTML = ""; // Clear the table body before adding new rows
     feedbacks.forEach((feedback) => {
+      // Sesuaikan akses ID berdasarkan struktur data yang benar
+      const feedbackId = feedback._id; // Sesuaikan ini jika strukturnya berbeda
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${feedback.rating}</td>
         <td>${feedback.content}</td>
         <td>
           <div class="action-buttons">
-            <button class="delete" onclick="deleteFeedback('${feedback._id.$oid}')">Delete</button>
+            <button class="delete" onclick="deleteFeedback('${feedbackId}')">Delete</button>
           </div>
         </td>
       `;

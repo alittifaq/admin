@@ -6,6 +6,10 @@ document.getElementById("gallery-tab").addEventListener("click", function () {
   loadGallery();
 });
 
+document.getElementById("feedback-tab").addEventListener("click", function () {
+  loadFeedback();
+});
+
 function logout() {
   window.location.href = "https://www.blkkalittifaq.id/dashboard/login.html";
 }
@@ -204,5 +208,90 @@ async function deleteGalleryItem(galleryTitle) {
   } catch (error) {
     console.error("Fetch error:", error);
     alert("Gagal hapus galeri, coba lagi ya!");
+  }
+}
+
+// Load Feedback
+async function loadFeedback() {
+  const content = document.getElementById("content");
+  content.innerHTML = `
+        <h2>Feedback</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rating</th>
+                        <th>Content</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="feedback-table-body">
+                    <!-- Feedback akan dimuat di sini -->
+                </tbody>
+            </table>
+        </div>
+    `;
+
+  try {
+    const response = await fetch(
+      "https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/feedback"
+    );
+    const feedbacks = await response.json();
+    const feedbackTableBody = document.getElementById("feedback-table-body");
+    feedbackTableBody.innerHTML = ""; // Clear the table body before adding new rows
+    feedbacks.forEach((feedback) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+                <td>${feedback.rating}</td>
+                <td>${feedback.content}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="delete" onclick="deleteFeedback('${feedback._id}')">Delete</button>
+                    </div>
+                </td>
+            `;
+      feedbackTableBody.appendChild(row);
+    });
+  } catch (error) {
+    console.error("Error loading feedbacks:", error);
+  }
+}
+
+async function deleteFeedback(feedbackId) {
+  try {
+    const deleteData = {
+      id: feedbackId.toString(), // Convert feedbackId to string
+    };
+
+    const response = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/feedback`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(deleteData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const text = await response.text();
+    try {
+      const data = JSON.parse(text);
+      console.log("Delete Success:", data);
+      alert("Feedback berhasil dihapus, beres!");
+      // Refresh the feedback list
+      loadFeedback(); // Call loadFeedback to refresh the list
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      console.log("Raw response:", text);
+      alert("Gagal hapus feedback, coba lagi ya!");
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
+    alert("Gagal hapus feedback, coba lagi ya!");
   }
 }

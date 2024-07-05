@@ -215,22 +215,22 @@ async function deleteGalleryItem(galleryTitle) {
 async function loadFeedback() {
   const content = document.getElementById("content");
   content.innerHTML = `
-        <h2>Feedback</h2>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rating</th>
-                        <th>Content</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="feedback-table-body">
-                    <!-- Feedback akan dimuat di sini -->
-                </tbody>
-            </table>
-        </div>
-    `;
+    <h2>Feedback</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Rating</th>
+            <th>Content</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="feedback-table-body">
+          <!-- Feedback akan dimuat di sini -->
+        </tbody>
+      </table>
+    </div>
+  `;
 
   try {
     const response = await fetch(
@@ -242,14 +242,14 @@ async function loadFeedback() {
     feedbacks.forEach((feedback) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-                <td>${feedback.rating}</td>
-                <td>${feedback.content}</td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="delete" onclick="deleteFeedback('${feedback._id}')">Delete</button>
-                    </div>
-                </td>
-            `;
+        <td>${feedback.rating}</td>
+        <td>${feedback.content}</td>
+        <td>
+          <div class="action-buttons">
+            <button class="delete" onclick="deleteFeedback('${feedback._id.$oid}')">Delete</button>
+          </div>
+        </td>
+      `;
       feedbackTableBody.appendChild(row);
     });
   } catch (error) {

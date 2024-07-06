@@ -27,6 +27,12 @@
               <td><input type="text" id="nama" name="nama" value="" /></td>
             </tr>
             <tr>
+              <td><label for="kategori">Kategori:</label></td>
+              <td>
+                <input type="text" id="kategori" name="kategori" value="" />
+              </td>
+            </tr>
+            <tr>
               <td colspan="2" class="center">
                 <input type="submit" value="Submit" />
               </td>
@@ -47,6 +53,7 @@
           var formData = {
             foto: document.getElementById("foto").value,
             nama: document.getElementById("nama").value,
+            kategori: document.getElementById("kategori").value,
           }; // Create JavaScript object to represent form data
 
           fetch(

@@ -48,6 +48,7 @@ async function loadProducts() {
       row.innerHTML = `
                 <td><img src="${product.foto}" alt="${product.nama}" width="50"></td>
                 <td>${product.nama}</td>
+                <td>${product.kategori}</td>
                 <td>
                     <div class="action-buttons">
                         <button class="edit" onclick="editProduct('${product.nama}')">Edit</button>

@@ -179,6 +179,7 @@ async function deleteGalleryItem(galleryTitle) {
       judul_kegiatan: galleryTitle.toString(), // Convert galleryTitle to string
     };
 
+    // Hapus dari database terlebih dahulu
     const response = await fetch(
       `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/gallery`,
       {
@@ -194,42 +195,30 @@ async function deleteGalleryItem(galleryTitle) {
       throw new Error("Network response was not ok");
     }
 
-    const text = await response.text();
-    try {
-      const data = JSON.parse(text);
-      console.log("Delete Success:", data);
-      alert("Galeri berhasil dihapus, beres!");
-
-      // Hapus gambar dari GitHub setelah menghapus dari database
-      const ghResponse = await fetch(
-        `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/deleteGitHubImage`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ fileName: galleryTitle }), // Mengirim nama file yang akan dihapus di GitHub
-        }
-      );
-
-      if (!ghResponse.ok) {
-        throw new Error("Failed to delete image from GitHub");
+    // Hapus dari GitHub menggunakan endpoint yang benar
+    const ghResponse = await fetch(
+      `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/file/img/${galleryTitle}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
+    );
 
-      const ghText = await ghResponse.text();
-      console.log("GitHub Delete Success:", ghText);
-      // Refresh the gallery list
-      loadGallery(); // Panggil loadGallery untuk menyegarkan daftar
-    } catch (error) {
-      console.error("Error parsing JSON:", error);
-      console.log("Raw response:", text);
-      alert("Gagal hapus galeri, coba lagi ya!");
+    if (!ghResponse.ok) {
+      throw new Error("Failed to delete image from GitHub");
     }
+
+    console.log("GitHub Delete Success");
+    alert("Galeri berhasil dihapus, beres!");
+    loadGallery(); // Muat ulang daftar galeri setelah penghapusan berhasil
   } catch (error) {
-    console.error("Fetch error:", error);
+    console.error("Error deleting gallery:", error);
     alert("Gagal hapus galeri, coba lagi ya!");
   }
 }
+
 
 // Load Feedback
 async function loadFeedback() {

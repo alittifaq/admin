@@ -199,8 +199,27 @@ async function deleteGalleryItem(galleryTitle) {
       const data = JSON.parse(text);
       console.log("Delete Success:", data);
       alert("Galeri berhasil dihapus, beres!");
+
+      // Hapus gambar dari GitHub setelah menghapus dari database
+      const ghResponse = await fetch(
+        `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/deleteGitHubImage`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fileName: galleryTitle }), // Mengirim nama file yang akan dihapus di GitHub
+        }
+      );
+
+      if (!ghResponse.ok) {
+        throw new Error("Failed to delete image from GitHub");
+      }
+
+      const ghText = await ghResponse.text();
+      console.log("GitHub Delete Success:", ghText);
       // Refresh the gallery list
-      loadGallery(); // Call loadGallery to refresh the list
+      loadGallery(); // Panggil loadGallery untuk menyegarkan daftar
     } catch (error) {
       console.error("Error parsing JSON:", error);
       console.log("Raw response:", text);

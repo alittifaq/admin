@@ -45,12 +45,17 @@
                 />
               </td>
             </tr>
+            <!-- Input untuk kategori -->
             <tr>
               <td><label for="product-category">Kategori:</label></td>
               <td>
-                <select id="product-category" name="product-category" required>
-                  <!-- Opsi kategori akan dimuat dinamis melalui JavaScript -->
-                </select>
+                <input
+                  type="text"
+                  id="product-category"
+                  name="product-category"
+                  class="input-field"
+                  required
+                />
               </td>
             </tr>
             <tr>
@@ -81,43 +86,9 @@
           document.getElementById("product-id").value = product._id;
           document.getElementById("product-name").value = product.nama;
           document.getElementById("product-photo").value = product.foto;
-
-          // Load categories
-          await loadCategories(product.kategori); // Assume product.kategori is an array of category IDs
+          document.getElementById("product-category").value = product.kategori; // Memasukkan kategori sebagai teks
         } catch (error) {
           console.error("Error loading product data:", error);
-        }
-      }
-
-      async function loadCategories(selectedCategories) {
-        try {
-          const response = await fetch(
-            `https://asia-southeast2-blkkalittifaq-426014.cloudfunctions.net/blkkalittifaq/data/categories`
-          );
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-
-          const categories = await response.json();
-
-          const selectElement = document.getElementById("product-category");
-          selectElement.innerHTML = ""; // Clear previous options
-
-          categories.forEach((category) => {
-            const option = document.createElement("option");
-            option.value = category._id;
-            option.textContent = category.name;
-            if (
-              selectedCategories &&
-              selectedCategories.includes(category._id)
-            ) {
-              option.selected = true;
-            }
-            selectElement.appendChild(option);
-          });
-        } catch (error) {
-          console.error("Error loading categories:", error);
         }
       }
 
@@ -126,9 +97,7 @@
           _id: productId,
           foto: document.getElementById("product-photo").value,
           nama: document.getElementById("product-name").value,
-          kategori: Array.from(
-            document.getElementById("product-category").selectedOptions
-          ).map((option) => option.value),
+          kategori: document.getElementById("product-category").value, // Mengambil nilai kategori dari input teks
         };
 
         try {
@@ -150,7 +119,7 @@
           const data = await response.json();
           console.log("Edit Success:", data);
           alert("Produk berhasil diedit!");
-          window.location.href = "index.html"; // Redirect back to the product list
+          window.location.href = "index.html"; // Redirect kembali ke daftar produk
         } catch (error) {
           console.error("Fetch error:", error);
           alert("Edit produk tidak berhasil.");

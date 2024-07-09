@@ -31,6 +31,17 @@ body {
   width: 100%;
 }
 
+.input-field {
+  width: 100%;
+  max-width: 400px; /* Atur lebar maksimum input field */
+  padding: 10px; /* Sesuaikan padding agar input field lebih nyaman */
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+
 #inputfile {
   display: flex;
   flex-direction: column;

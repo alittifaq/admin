@@ -41,7 +41,6 @@ body {
   box-sizing: border-box;
 }
 
-
 #inputfile {
   display: flex;
   flex-direction: column;

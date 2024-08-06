@@ -25,6 +25,7 @@ async function loadProducts() {
                     <tr>
                         <th>Foto</th>
                         <th>Nama Produk</th>
+                        <th>Kategoti</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
